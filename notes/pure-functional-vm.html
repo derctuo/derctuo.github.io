@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html><title>Pure functional VM ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Pure functional VM</h1><div class="metadata">Kragen Javier Sitaker, 02020-04-21
+(1 minute)</div><p>I'm trying to figure out how to specify reproducible computations for
+Derctuo in a way that won't cost me months of work before I can start
+using it.</p>
+<p>Urbit approaches the problem of doing reproducible computations with a
+pure functional virtual machine rather than an imperative one.  This
+rules some things out of scope: issues of efficiency, memory usage,
+and latency, for example.  But it certainly simplifies the kind of
+computation whose purpose is to compute an unknown result, rather than
+to react to events in the world.  And it might be possible to make it
+fast enough on modern machines, at least under most circumstances.</p>
+<p>There's lots of information out there about how to do reasonably
+efficient evaluation of λ-calculus expressions, and I've done a few
+compilers along those lines myself.  My Bicicleta work instead uses
+Abadí and Cardelli's ς-calculus as the basis, which is slightly more
+verbose than the λ-calculus but, I think, considerably more convenient
+for programming.  Using name-value pairs rather than positional
+arguments to pass data around permits decentralized extensibility.</p>
+<p>The Bicicleta interpreter that I wrote, however, is extremely slow,
+close to the speed of bash script.  I'm sure I can do better than
+that, using approaches like those I used in Ur-Scheme.</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/sa.html">Systems architecture</a> (13 notes)
+</li><li><a href="../topics/derctuo.html">Derctuo</a> (9 notes)
+</li><li><a href="../topics/reproducibility.html">Reproducibility</a> (5 notes)
+</li><li><a href="../topics/instruction-sets.html">Instruction sets</a> (5 notes)
+</li><li><a href="../topics/urbit.html">Urbit</a> (3 notes)
+</li><li>Bicicleta</li></ul></div></html>

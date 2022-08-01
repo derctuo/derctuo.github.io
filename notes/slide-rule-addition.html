@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html><title>Slide rule addition ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Slide rule addition</h1><div class="metadata">Kragen Javier Sitaker, 02020-06-22
+(3 minutes)</div><p>Slide rules can’t add and subtract.  Could they?</p>
+<p>If <em>a</em> ≠ 0, then <em>a</em> + <em>b</em> = (1 + <em>b</em>/<em>a</em>)<em>a</em>.  Suppose our slide rule
+reads with a precision of ±0.2%; then if <em>b</em>/<em>a</em> &lt; 0.002, we can just
+round this to <em>a</em>, and if <em>b</em>/<em>a</em> &gt; 500, we can just round it to <em>b</em>.
+But in between, when they’re of roughly similar magnitudes, we might
+want to use this to calculate a decent approximation of the sum.</p>
+<p>In Logarithm Land, we have:</p>
+<blockquote>
+<p>log(<em>a</em> + <em>b</em>) = log(1 + 10<sup>log <em>b</em> - log <em>a</em></sup>) + log(<em>a</em>), <em>a</em> ≠ 0</p>
+</blockquote>
+<p>We can add the ability to evaluate this to a slide rule as follows.
+Define <em>j</em>(<em>c</em>) = log(1 + 10<sup><em>c</em></sup>).  Add three <em>j</em> scales to
+the body of the slide rule: one with marks at log(1 +
+10<sup><em>c</em></sup>) for 1 ≤ <em>c</em> ≤ 10, one with marks for 10 ≤ <em>c</em> ≤ 100,
+and one with marks for 100 ≤ <em>c</em> ≤ 1000.</p>
+<p>To add two numbers of the same sign, then, take the larger one as <em>b</em>.
+Use the C and D scales to compute log <em>b</em> - log <em>a</em> as a position on
+the D scale; move the cursor to it.  Look on the appropriate <em>j</em> scale
+to read the numerical value of (1 + <em>b</em>/<em>a</em>).  Now use the C and D
+scales to multiply that numerical value by <em>a</em>, which perhaps you
+still have encoded in the position of the slide.</p>
+<p>Working backwards from there, we want the slide to be in a position
+that encodes multiplying by <em>a</em>, which means that the D-scale index
+should be aligned with <em>a</em> on the C scale.  This means that <em>b</em> needed
+to be on C originally.</p>
+<p>So the procedure is: choose <em>b</em> to be the larger of the two summands,
+exchanging them if necessary.  Align the slide to <em>a</em> on the C scale.
+Move the cursor to <em>b</em> on the C scale; its position on the body is now
+log <em>b</em> - log <em>a</em>, so the cursor on the D scale now indicates <em>b</em>/<em>a</em>.
+Look up the numerical value of 1 - <em>b</em>/<em>a</em> on the appropriate <em>j</em>
+scale with the cursor.  Move the cursor to that numerical value on the
+D scale.  Now read <em>a</em> + <em>b</em> on the C scale with the cursor.</p>
+<p>I’m not sure if there’s a similarly convenient approach using the CI
+and DI scales, or if there’s a way to use that same <em>j</em> scale for
+subtraction, or if it works better to use <em>b</em> &lt; <em>a</em> (could that give
+you fewer <em>j</em> scales?).</p>
+<p><a href="https://www.math.utah.edu/~alfeld/sliderules/">Peter Alfeld reports that Jeff Weiner
+reports</a> that the
+Pickett Microline 115 and the Pickett 901 rules <em>can</em> add and
+subtract, but it turns out that those just have linearly-ruled X and Y
+scales; they can’t add and subtract numbers found on the standard
+scales like C, D, A, and B, nor do their sums and differences appear
+there.</p>
+<p>Now, of course this is not very useful if your precision is ±0.2%: you
+only have three sig figs, and adding two three-digit numbers in your
+head isn’t that hard.  You could imagine a higher-precision slide rule
+using verniers, finer details, and/or larger dimensions, perhaps
+folded helically.  This approach might then be more useful.</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/contrivances.html">Contrivances</a> (44 notes)
+</li><li><a href="../topics/math.html">Math</a> (13 notes)
+</li><li><a href="../topics/nostalgia.html">Nostalgia</a> (6 notes)
+</li><li><a href="../topics/calculation.html">Calculation</a> (6 notes)
+</li><li>Slide rules</li></ul></div></html>

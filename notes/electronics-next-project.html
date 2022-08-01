@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html><title>Electronics next project ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Electronics next project</h1><div class="metadata">Kragen Javier Sitaker, 02020-12-21 (updated 02020-12-22)
+(7 minutes)</div><p>I’m suffering from analysis paralysis as I ponder what electronic
+project to do next to level up (to both level up my skills and my
+equipment).  This is related to <a href="microcontroller-inventory.html">the microcontroller
+inventory</a> and <a href="ghettobotics-nonshopping-list.html">the nonshopping
+list</a>.  Here are some 58 projects I
+could try to do, mostly in random order with five randomly chosen but
+with a few manually chosen to move to the top list of finalists:</p>
+<ul>
+<li><strong>house thermometer</strong> (indoor, outdoor, logging)</li>
+<li><strong>Joule Thief</strong> as a simple battery tester if nothing else</li>
+<li><strong>7-segment display</strong> with 7 scavenged discrete LEDs in some kind of
+  case with slits and partitions, which can be very large</li>
+<li><strong>use a speaker as a microphone</strong> to get bidirectional audio on a
+  microcontroller.</li>
+<li><strong>make the strip of giant LEDs shine</strong> so we can illuminate with it</li>
+<li><strong>audio amp</strong> driving one or more of the speakers here</li>
+<li><strong>metronome</strong> with relays</li>
+<li><strong>low-bandwidth 433MHz license-free SDR</strong> for kilometer-scale robust
+  communication</li>
+<li><strong>pulse soldering</strong>: a circuit to deliver a calibrated amount of
+  energy at a calibrated power level for, for example, battery pack
+  construction or hair-wire soldering</li>
+<li><strong>ultra-low-power FM radio transmitter</strong> to listen to music wirelessly</li>
+<li><strong>display text on a 7-segment LED screen</strong> from an AVR or STM32</li>
+<li><strong>timer with relay</strong> to turn off the water pump after 20'</li>
+<li><strong>plant waterer</strong> to keep the plants from dying; this probably
+  involves a microwave oven relay, a washing machine valve, a
+  microcontroller, and some transistors</li>
+</ul>
+<hr />
+<ul>
+<li><strong>hot air pencil</strong>: thermostatic control of air temperature permits
+  rapid localized heating, very useful for rework and electronics
+  scavenging, as well as preheat for soldering</li>
+<li><strong>ultrasound measurement</strong> with two piezos and some oil, to see what
+  frequencies I can get through the oil; this might require the Blue
+  Pill</li>
+<li><strong>basic Magic Kazoo</strong>: you hum into a microphone on one end, and it
+  does pitch ID and synthesizes a musical instrument out the other</li>
+<li><strong>lightbulb thermometer</strong> using a lightbulb as the temperature sensor</li>
+<li><strong>read the digital caliper’s output port</strong> to get another
+  20-micron-precision positional feedback source</li>
+<li><strong>stepper controller</strong>: drive a low-power stepper motor with some
+  transistors and a microcontroller</li>
+<li><strong>an electromagnet</strong>, pure and simple</li>
+<li><strong>electrolysis controller</strong> to permit precise control of
+  electroplating, electro-etching, and similar processes</li>
+<li><strong>copper-wire foam cutter</strong> (see <a href="copper-segelin.html">Copper
+  Segelin</a>)</li>
+<li><strong>micro-engraver</strong> with three piezos, or two piezos and
+  electro-etching, or one piezo and several electrodes, as a testbed
+  for micro-engraving ideas</li>
+<li><strong>stainless steel wool foam cutter</strong>: it’s about 0.2Ω per 100mm,
+  which is in the same ballpark as thinner copper wire for the <a href="copper-segelin.html">copper
+  segelín</a>, but instead of burning at 300° it can
+  get to over 800°, which is plenty for cutting styrofoam.</li>
+<li><strong>adjustable switching power supply</strong> using discontinuous conduction
+  mode to get current limiting</li>
+<li><strong>program the PALs</strong> I scavenged to compute some particular logic
+  function</li>
+<li><strong>noise-based optical position encoder</strong>: by measuring randomly varying transmissivity or reflectivity along a linear track, it can rapidly determine its precise position</li>
+<li><strong>read and write SD card from AVR or STM32</strong>: SD cards support SPI, and this enables a lot of projects that otherwise need way too much space.</li>
+<li><strong>air conditioner remote control</strong> to control the air conditioner with infrared</li>
+<li><strong>FM radio receiver</strong> to listen to the radio</li>
+<li><strong>Blue Pill oscilloscope</strong>, only up to a megahertz or two but still better than a sound card</li>
+<li><strong>ultrasonic vector image transmission</strong> (see <a href="audio-vector-image.html">audio vector image</a>)</li>
+<li><strong>program my ATMega328s with the Duemilanove</strong>, the ones that are in a tube</li>
+<li><strong>program the ATTiny2313s</strong> I have a tube full of here so I can use them for things like capacitance measurement</li>
+<li><strong>humidity sensor</strong> (see <a href="pet-dielectric-spectroscopy.html">PET dielectric spectroscopy</a>)</li>
+<li><strong>make an MPPT to measure a red LED in the sun</strong> to find out how much energy you can harvest from it and at what power level</li>
+<li><strong>recognize whistling with an AVR</strong> to command household electronics</li>
+<li><strong>synthesize voice with AVR and speaker</strong> to get output </li>
+<li><strong>program the ATTiny45s</strong> so I can use them for things like my notebook</li>
+<li><strong>dielectric spectroscopy</strong>: identify materials, especially including humidity, capacitively through their frequency-dependent permittivity</li>
+<li><strong>program Blink onto one of the Blue Pills</strong> so I can start using them</li>
+<li><strong>test the PAL delay line</strong> I scavenged from a VCR</li>
+<li><strong>Lissajous projector</strong>, scanning a laser pointer with a resonating
+  nutating mirror.  Once the mirror has a stable resonance set up,
+  maybe from a speaker, you can tune in a picture by moving a
+  photodiode into the illuminated area to find the overall period,
+  then to corners and across the center to find the phase</li>
+<li><strong>impedance tomography sensor</strong> to detect touches on a resistive
+  surface with just a few electrodes and a microcontroller</li>
+<li><strong>emulate a PS/2 keyboard</strong> to get data from microcontrollers onto
+  bigger computers (see <a href="machine-readable-microcontroller-output.html">machine-readable microcontroller
+  output</a>)</li>
+<li><strong>build a simple circuit with hair wire</strong> to see if it can be made
+  feasible</li>
+<li><strong>data reception with bidirectional LEDs</strong> as extensively tested
+  for, among other things, PJON</li>
+<li><strong>linear motor with aluminum sheet</strong> consisting of two or three
+  coils that can levitate and move the sheet; this probably requires
+  some pretty hefty power</li>
+<li><strong>thermostat-controlled microfurnace</strong> for things like firing
+  pottery</li>
+<li><strong>current microbalance</strong> to weigh light things by counteracting
+  their weight with a precisely measured electromagnetic force</li>
+<li><strong>adjustable linear power supply</strong> hanging off an ATX or power-brick
+  power supply so I have an adjustable voltage; this becomes a lot
+  more useful once it has some kind of readout, and ideally current
+  limiting too; if it depends on the upstream power supply for voltage
+  regulation it can be just a trimpot and an emitter follower</li>
+<li><strong>TransistorTester</strong>, maybe not a super sophisticated one</li>
+<li><strong>rotational capacitive sensor</strong> made of paper towel tubes and
+  aluminum foil to measure rotational position with some precision,
+  thus providing feedback for DC motors</li>
+<li><strong><a href="capacitor-meter.html">capacitor meter</a></strong>: with Duemilanove, to
+  begin with</li>
+<li><strong>test PS/2 keyboard</strong> by programming the host side of the PS/2
+  protocol into an AVR or STM32</li>
+<li><strong>decode a printer position sensor signal</strong> of one of the two inkjet
+  carriage assemblies I have here so as to get a 20-μm-precision
+  motion control feedback system</li>
+<li><strong>4-wire ohmmeter</strong> to measure sub-hectaohm resistances precisely</li>
+<li><strong>show text on a passive LCD</strong> (ideally 7-segment at first; see <a href="screens.html">the
+  note on screens</a> and <a href="rebraining.html">rebraining</a>)</li>
+<li><strong>decode the microwave keyboard</strong> so I can use it as a project box
+  with membrane buttons</li>
+</ul><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/electronics.html">Electronics</a> (42 notes)
+</li><li><a href="../topics/ghettobotics.html">Ghettobotics</a> (18 notes)
+</li><li><a href="../topics/microcontrollers.html">Microcontrollers</a> (14 notes)
+</li><li><a href="../topics/independence.html">Independence</a> (9 notes)
+</li><li>Relays</li></ul></div></html>

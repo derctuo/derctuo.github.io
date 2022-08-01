@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html><title>Relay buzzer ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Relay buzzer</h1><div class="metadata">Kragen Javier Sitaker, 02020-11-23
+(2 minutes)</div><p>As a test of mostly breadboading, I breadboarded <a href="http://falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWKsyVQTgOwA4BMAWdbTXMbbCBSEJfAZgCgAlEAWn2xADZ82OQ6uKMPzUwQ6pOgIGAJz6ceC8Ji7DUcBgBdlYVQKF61YtuOkkeosNZLo7ySLixdxTzPkyRM3uiHyptNnQ1MHQhdk5QiXBkLgQ8SDo6bHo6SCxsdFjiYPwXURxIBC41VUg5IJCw030o9XgGAHNlXEhOCJBcYqgmg3BqwU7u8r1ObDFcMepx9WQJFHRi9xcnOh5Mzhgi8Hh4ByFJ8oB3ZSVqM4YTpWveGePuXiUwfEfee+fX8BeVY0u+8U4gzAXEkf34AL8kX093BtW+Rh6JxmEK6IUmiKGaM4qIEXE2fxxa3aCKJGNYCLq5P0pPKABN1OjzrwhLSAKYAMwAhgBXAA2Wj+E0BhkZgoe4ouAA82N06KEvmpBEJeOIQExWbzOQBPAA6AGcAEbcgBextZsn1RwAlloABYAe25Wn1ADkAML6gDG9oAdlpOZ6tHqGEA" title="https://tinyurl.com/y35xk5ov">this 12V relay
+buzzer</a> from a couple of random NPN
+transistors and a microwave oven relay:</p>
+<p><img alt="(circuit schematic)" src="relay-buzzer.png" /></p>
+<pre><code>$ 1 0.000005 0.010109782498721881 50 5 43
+R -48 64 -48 32 0 0 40 12 0 0 0.5
+r -48 64 -48 176 0 1000
+t -48 176 32 176 0 1 0.6207115498642259 0.6788785101220731 410
+t -96 192 -48 192 0 1 -0.02761021024479937 0.6512682998772737 760
+r -96 192 -176 192 0 1000
+g -48 208 -48 256 0
+g 32 192 32 256 0
+178 80 128 80 80 0 1 0.2 0.019618688531384095 0.05 1000000 0.02 280
+w -48 64 0 64 0
+w 64 64 64 80 0
+w 64 64 144 64 0
+w 144 64 144 176 0
+w 32 128 32 160 0
+w 48 128 48 176 0
+w 48 176 144 176 0
+w 80 128 256 128 0
+w 256 128 256 368 0
+w 256 368 -176 368 0
+w -176 192 -176 368 0
+d 0 128 0 64 2 default
+w 0 128 32 128 0
+w 0 64 64 64 0
+x -56 319 146 322 4 12 Relay\sbuzzer\swithout\sNC\scontacts
+</code></pre>
+<p>Falstad’s simulation runs the relay at 200kHz by default, much faster
+than the relay I have, which is at about 100 Hz.</p>
+<p>It was frustrating and slow to build the circuit because:</p>
+<ul>
+<li>I was making jumper wires by sanding varnish off coarse magnet wire
+  with sandpaper between my fingers;</li>
+<li>I didn’t know the pinouts of the transistors or the values of the
+  resistors (actually I think one of them may have been 1k5Ω)</li>
+<li>probing the breadboard with probes that don’t fit was pretty
+  inconvenient;</li>
+<li>I broke a leg off Q2 during the process, and that took me a while to
+  figure out;</li>
+<li>a multimeter with no audio is a slow way to check out the circuit.</li>
+</ul>
+<p>However, once I had it all connected and checked out with the
+multimeter, I plugged it in and it ran.  This was satisfying.</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/contrivances.html">Contrivances</a> (44 notes)
+</li><li><a href="../topics/electronics.html">Electronics</a> (42 notes)
+</li><li><a href="../topics/experiment-report.html">Experiment report</a> (10 notes)
+</li><li><a href="../topics/falstad.html">Falstad’s circuit simulator</a> (7 notes)
+</li></ul></div></html>

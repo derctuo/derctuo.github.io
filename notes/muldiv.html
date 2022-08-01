@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html><title>Muldiv ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Muldiv</h1><div class="metadata">Kragen Javier Sitaker, 02020-11-26
+(1 minute)</div><p>In Forth and some other contexts, there’s a <code>*/</code> operation which
+multiplies by a ratio in integer arithmetic, avoiding overflow
+typically by using a double-precision intermediate product.  So even
+if you’re using a 16-bit Forth, <code>23082 7 8 */</code> should give you 20196,
+which only differs from the correct answer 20196¾ by ¾, rather than
+3812, which is wildly wrong but what you would get if you truncated to
+16 bits after the multiplication.</p>
+<p>It occurred to me to wonder if you can do the division and the
+multiplication at the same time, if you’re doing this in hardware,
+thus overlapping the multiplication with the division.  Division can
+generate a quotient one bit at a time, and those quotient bits can be
+used to control a garden-variety shift-and-add multiplier.</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/performance.html">Performance</a> (25 notes)
+</li><li><a href="../topics/instruction-sets.html">Instruction sets</a> (5 notes)
+</li><li><a href="../topics/digital-logic.html">Digital logic</a> (3 notes)
+</li></ul></div></html>

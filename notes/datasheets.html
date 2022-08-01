@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html><title>Guide to finding datasheets and avoiding malicious datasheet SEO sites ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Guide to finding datasheets and avoiding malicious datasheet SEO sites</h1><div class="metadata">Kragen Javier Sitaker, 02020-11-02 (updated 02020-12-22)
+(7 minutes)</div>
+<p>Getting datasheets used to be easier, but it’s gotten harder on the
+modern web due to SEO scum.  Google is almost useless.
+<a href="https://yandex.ru/">https://yandex.ru/</a> gives much better results for datasheet searches.
+(Compare the results for searching [bp2842 datasheet] on the two
+engines: Yandex gives you datasheets for the TI TL2842BP, which may be
+a slightly wrong chip, but Google gives you random bullshit.  The term
+“Даташит” may be helpful,) However, you run into CAPTCHAs occasionally
+on Yandex.  For non-obsolete parts, Digi-Key is often a better source.
+Still, though, you need to blacklist some providers.</p>
+<p>Yandex puts a link saying “pdf Посмотреть” after search results that
+actually point to PDFs.  Do not follow this link; it goes to
+docviewer.yandex.ru.  But it does allow you to distinguish PDF links
+from fake links.  (Except that the SEO scum sometimes generate fake
+PDFs.)</p>
+<p>Most of the sites mentioned have their own search engines.</p>
+<p>Octopart has its own search engine, and it’s useful if you want to buy
+things, and it does provide datasheet links, but for example
+<a href="https://octopart.com/search?q=bp2812">searching for bp2812 on Octopart</a> gives you sealed lead-acid
+batteries.  With a datasheet, mind you.  Searching for “c3205” (the
+marking on the common 1990s 2SC3205 transistor) similarly produces no
+useful results.</p>
+<h2>Known-good sources</h2>
+<ul>
+<li>datasheetspdf.com: iframe with PDF datasheet accessible from the
+  “Download Foobar3103 datasheet” link as well as the “Foobar3103
+  datasheet” links in the left column.  <a href="https://datasheetspdf.com/pdf/1405124/SeCoS/C3205/1">C3205, for example</a>.</li>
+<li>ndatasheet.com: alternate domain for datasheetspdf.com, saying, “The
+  site has been moved : DatasheetsPDF.com” at the bottom.  <a href="http://www.ndatasheet.com/noconverter/1018976/BPS/BP2812-pdf.html">BP2812,
+  for example</a>.</li>
+<li>chipdip.ru</li>
+<li>datasheet-pdf.com: iframe with PDF datasheet in third iframe on
+  page.  <a href="http://www.datasheet-pdf.com/PDF/C2878-Datasheet-ToshibaSemiconductor-634662">C2878, for example.</a> Decent filenames too.  Apparently
+  scraped from datasheet4u.</li>
+<li>njr.com: direct links to PDF show up in Google, but only for their
+  products.  <a href="http://www.njr.com/semicon/PDF/NJM4565_E.pdf">NJM4565, for example.</a></li>
+<li>Mouser: datasheet link after “Datasheet:” saying “Foobar3103
+  Datasheet (PDF)”, but only for current products.  <a href="https://www.mouser.com/ProductDetail/NJR/NJM4565L?qs=cYKsvIpO1PijlM%2FDhzFbCA%3D%3D">NJM4565, for
+  example.</a></li>
+<li>digchip.com: iframe “ifr data” on page reached from “Download
+  Foobar3103 datasheet” link; <a href="https://www.digchip.com/datasheets/parts/datasheet/406/BA5936S.php">BA5936S, for example</a>.</li>
+<li>datasheet4u.com: iframe with PDF datasheet on page reached from “PDF
+  Download: <em>[IMG] Foobar3103 datasheet PDF</em>” link, same as
+  datasheetspdf.com.  <a href="https://www.datasheet4u.com/datasheet-pdf/JSL/C3199/pdf.php?id=91129">C3199, for example.</a></li>
+<li>kazus.ru: iframe “datasheet pdf” contains PDF datasheet with
+  unreasonably long filename, on page reached by posting “[
+  Foobar3103.PDF (338 Kb) ]” form.  <a href="http://kazus.ru/datasheets/pdf-data/4298625/TI/TL2842BP.html">TL2842BP, for example</a>.</li>
+<li>rlocman.ru: link “Скачать” to vendor’s site via a redirector.
+  <a href="https://www.rlocman.ru/datasheet/data.html?di=174635&amp;/TL2842BP">TL2842BP, for example</a>.</li>
+<li>power-on.tech: links labeled “Datasheet Foobar3103” and “Скачать
+  Datasheet Foobar3103” on main page.  <a href="https://power-on.tech/datasheet-%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B0%D1%8F-%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-uc2842b/">UC2842B, for example</a>.</li>
+<li>chinesechip.com: PDFs directly linked from Google, albeit with goofy
+  GUID firenames.  <a href="http://www.chinesechip.com/files/2015-06/d271a84d-12eb-4cd0-b0bb-3accb73bee96.pdf">BP2812, for example</a>.</li>
+<li>ibselectronics.com: PDFs linked directly from Yandex, with good
+  filenames.  <a href="http://www.ibselectronics.com/ibsstore/datasheet/BP2832A_EN_DS_Rev.1.0.pdf">BP2832, for example</a>.</li>
+<li>onsemi.com: PDFs linked directly from Yandex and Google, with good filenames,
+  but only for ON Semiconductor products.  Note that they’ve recently
+  fucked us over by breaking the Fairchild links from Digi-Key.</li>
+<li>st.com: PDFs linked directly from Google, with good filenames, but
+  only for ST products.  With shitty filenames.</li>
+<li>alltransistors.com: iframe and “Abrir como PDF” links of the form
+  <a href="https://alltransistors.com/pdfdatasheet_panasonic/2sd1512_e.pdf">https://alltransistors.com/pdfdatasheet_panasonic/2sd1512_e.pdf</a> on
+  “Foobar PDF datasheet” page with URL of form
+  <a href="https://alltransistors.com/es/pdfview.php?doc=2sd1512_e.pdf&amp;dire=_panasonic">https://alltransistors.com/es/pdfview.php?doc=2sd1512_e.pdf&amp;dire=_panasonic</a>
+  on link of form “2sd1512_e.pdf” on “Foobar
+  . Datasheet. Equivalente. ...” page linked from Google, for example,
+  <a href="https://alltransistors.com/es/transistor.php?transistor=18229">2SD1512</a>.</li>
+<li>datasheetcafe.com: link under header “Foobar Datasheet” labeled [
+  FOOBAR.PDF ] linking to link of the form
+  <a href="http://j5d2v7d7.stackpathcdn.com/wp-content/uploads/2015/09/TT2140.pdf">http://j5d2v7d7.stackpathcdn.com/wp-content/uploads/2015/09/TT2140.pdf</a>,
+  for example, <a href="http://www.datasheetcafe.com/tt2140-datasheet-sanyo/">TT2140</a>.</li>
+<li>yoreparo.com: people post service manuals in the forums.</li>
+<li>tvsat.com.pl: datasheets directly linked from Google, e.g., <a href="https://www.tvsat.com.pl/pdf/2/2sb985_san.pdf">2SB985</a></li>
+<li>datasheet.octopart.com: datasheets directly linked from Google,
+  e.g., <a href="http://datasheet.octopart.com/2SA1015-Y(F)-Toshiba-datasheet-9586966.pdf">2SA1015</a></li>
+<li>pdf.voron.ua: datasheets directly linked from Google, e.g., <a href="https://pdf.voron.ua/files/pdf/tranzistor/2SA984.pdf">2SA984</a></li>
+<li>vishay.com: datasheets directly linked from Google, but only for
+  their products (including old Siliconix parts)</li>
+<li>nxp.com: similarly, but including old Freescale and Philips parts;
+  e.g. the <a href="https://www.nxp.com/docs/en/data-sheet/MC9S08SG32.pdf">mc9s08sg32</a></li>
+<li>infineon.com: similarly, but including old International Rectum
+  Fryer parts</li>
+<li>irf.com: similarly, though they redirect to infineon.com (with a
+  working link to the PDF)</li>
+<li>datasheet.lcsc.com: similarly, but they carry a huge array of
+  current parts, including many even Digi-Key doesn’t; for example,
+  the <a href="https://datasheet.lcsc.com/szlcsc/1810171710_Holtek-Semicon-HT7333-A_C21583.pdf">HT7333</a></li>
+</ul>
+<h2>Broken at the moment</h2>
+<ul>
+<li>ru.datasheetbank.com</li>
+</ul>
+<h2>Malicious but sometimes usable if nothing else works</h2>
+<ul>
+<li>datasheetarchive.com: iframe with PDF accessible via “PDF” link in
+  “PDF” column — but for the wrong part!  <a href="https://www.datasheetarchive.com/A1286-datasheet.html">A1286, for example</a>.
+  However, I <em>did</em> get the right datasheet for <a href="https://www.datasheetarchive.com/CXA1498S-datasheet.html">CXA1498S</a>.</li>
+<li>kynix.com: links to alldatasheet.com, for example for <a href="https://www.kynix.com/Detail/38114/STP7N60FI.html">STP7N60FI</a>.</li>
+</ul>
+<h2>Blacklist; <em>never visit</em> (at least if you want the datasheet)</h2>
+<ul>
+<li>radiolibrary.ru: provides lots of information in HTML, in Russian,
+  but no datasheet</li>
+<li>datasheetq.com: iframe “contentpdf” on “DOWNLOAD” link redirects to
+  home page.  <a href="http://www.datasheetq.com/datasheet-download/219014/1/Isahaya/A1286">A1286, for example</a>.</li>
+<li>web-bcs.com: refreshes to page with no PDF; <a href="https://www.web-bcs.com/transistor/tc/a0/A1286.php?lan=en&amp;cl=1">A1286, for example</a>.</li>
+<li>datasheet.es: not only no PDF link, but malicious SEO alt text
+  (“Foobar3103 arduino”) on links to PNGs that have <em>had all the text
+  removed</em>.  “PDF descargar” link with “download.php?id=foobar” points
+  to HTML page containing only malicious cloaking JavaScript
+  redirecting you to the HTML page.  <a href="http://www.datasheet.es/PDF/199122/CXA1498S-pdf.html">CXA1498S, for example</a>.  Does
+  have text ripped from the PDF in HTML, though.</li>
+<li>datasheet26.com: same as datasheet.es, but in Russian.  <a href="http://www.datasheet26.com/search.php?sWord=BP2812">BP2812, for
+  example</a>.</li>
+<li>datasheetcatalog.com: no PDF link; link labeled “Download
+  <em>Foobar3103 pdf datasheet</em> from FOOCORP” is JS, linking to an URL
+  ending in “.pdf”, but that page is HTML and just links you back to
+  the original page and similar ones.  <a href="http://www.datasheetcatalog.com/datasheets_pdf/C/X/A/1/CXA1498S.shtml">CXA1498S, for example</a>.</li>
+<li>y-ic.com: generates PDFs with no actual information about the chip,
+  containing only advertisements.  <a href="https://www.y-ic.com/pdf/dc/5383541-BP2812.pdf">BP2812, for example</a>.</li>
+<li>transistordata.com: PDF pages are 404; also has hits for things it
+  doesn’t have datasheets for</li>
+<li>assets.nexperia.com: 403 Forbidden for wget</li>
+<li>worldwayelec.com: generates fake datasheet PDFs containing only ads,
+  has no actual information on parts; <a href="https://www.worldwayelec.com/pro/sanyo/avc479/3488317">AVC479, for example</a>.</li>
+<li>alldatasheet.es/alldatasheet.com: previously quite difficult: PDF with
+  application/octet-stream content-type and .html URL ending,
+  accessible via form POST of “[ Download ]” button, on page
+  accessible via “Download” link to URL of form
+  <code>https://pdf1.alldatasheet.es/datasheet-pdf/download/35940/ROHM/BA3126N.html</code>,
+  in a locked filing cabinet with a sign saying “Beware of the
+  jaguar”; <a href="https://www.alldatasheet.es/datasheet-pdf/pdf/35940/ROHM/BA3126N.html">BA3126N, for example</a>, or <a href="https://www.alldatasheet.com/datasheet-pdf/pdf/168231/TI/TL2842BP.html">TL2842BP</a>.  Was a last resort.
+  Now the button says “[ If You Want to View Datasheet, Click To Here !! ]”
+  instead, but doesn’t work.</li>
+<li>ic-components.com: generates fake datasheet PDFs containing only
+  ads; <a href="https://www.ic-components.com/products/caf694907/AS12W-K.pdf">AS12W-K</a>, for example.</li>
+</ul>
+<h2>Transistor part numbers</h2>
+<p>kludge explains:</p>
+<blockquote>
+<p>There are three religions: Japanese numbers, Pro-Electron numbers,
+and American JEDEC numbers. Japanese numbers all start with 2S so
+they don’t bother printing the 2S part.  American ones start with 2N
+but they print it.  Pro-Electron ones have two letters for type and
+then more numbers.</p>
+</blockquote>
+<p>So if you have a Japanese transistor that says C3205 on it, maybe look
+for 2SC3205.</p>
+<p>Surface-mount parts are a bitch.  There’s a book I’ve seen
+somewhere...</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/electronics.html">Electronics</a> (42 notes)
+</li><li><a href="../topics/practical.html">Practical</a> (12 notes)
+</li><li><a href="../topics/regrettable.html">Regrettable</a> (3 notes)
+</li></ul></div></html>

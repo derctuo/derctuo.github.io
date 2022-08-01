@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html><title>Using C99 compound literals unjustifiably ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Using C99 compound literals unjustifiably</h1><div class="metadata">Kragen Javier Sitaker, 02020-11-27
+(6 minutes)</div><p>ISO C99, and GCC since earlier, support <a href="https://gcc.gnu.org/onlinedocs/gcc/Compound-Literals.html">so-called compound
+literals</a>.  I’ve written a number of C functions that look more or
+less like this:</p>
+<pre><code>static struct point point_at(int x, int y)
+{
+    struct point p = {.x = x, .y = y};
+    return p;
+}
+</code></pre>
+<p>The compound literal syntax allows you to write this more simply:</p>
+<pre><code>static struct point point_at(int x, int y)
+{
+    return (struct point){.x = x, .y = y};
+}
+</code></pre>
+<p>However, in simple cases like this, it often eliminates the need for
+the function altogether, if it existed only for brevity; you can just
+say <code>typedef struct point point; ... mp = (point){3, 4};</code> rather than
+<code>mp = point_at(3, 4);</code>.</p>
+<p>This is of course even more useful for arguments of functions;
+consider:</p>
+<pre><code>static point delta(point a, point b)
+{
+    return (point) {.x = a.x - b.x, .y = a.y - b.y};
+}
+
+static int distsq(point a, point b)
+{
+    point d = delta(a, b);
+    return d.x*d.x + d.y*d.y;
+}
+
+...
+printf("%d\n", distsq((point){2, -1}, (point){5, 3}));
+</code></pre>
+<p>It’s a shame that C doesn’t have top-down type inference for this
+context, so we can’t write <code>distsq({2, -1}, {5, 3})</code> and have the
+compiler infer the <code>point</code> type.  Even OCaml fails us here — because
+its type inference is bottom-up, to infer types in such cases it
+requires the field names of record types to be unique, like 1970s C,
+rather than scoping them within a single record type: <a href="https://stackoverflow.com/questions/8928970/two-fields-of-two-records-have-same-label-in-ocaml">as SoftTimur
+pointed out on Stack Overflow, this is an error in OCaml</a>:</p>
+<blockquote>
+<pre><code>type name =
+    { r0: int; r1: int; c0: int; c1: int;
+      typ: dtype;
+      uid: uid (* key *) }
+
+and func =
+    { name: string;
+      typ: dtype;
+      params: var list;
+      body: block }
+</code></pre>
+</blockquote>
+<p>This is <a href="https://caml.inria.fr/pub/old_caml_site/FAQ/FAQ_EXPERT-eng.html#labels_surcharge">in the OCaml FAQ</a>.</p>
+<p>(There’s an interesting niche open for a language that uses structural
+subtyping like OCaml’s object types and polymorphic variants, but for
+records with an open set of field names — the kind of thing people do
+in JS or Lua or with JSON, but with static type checking.  I think
+OCaml didn’t have subtyping at all at the time records were added, and
+its use is still controversial.)</p>
+<p>Getting back to C, one of the more interesting uses for <a href="https://gcc.gnu.org/onlinedocs/gcc/Designated-Inits.html#Designated-Inits">so-called
+designated initializers for struct fields</a> (<code>.x =</code>...) is
+<em>optional values</em>.  If you have a struct initializer with any
+initialized fields in it, then <em>all</em> the fields of the struct are
+initialized — even if its storage class is <code>auto</code>, the unspecified
+ones are initialized to 0, as in Java or Golang!  So regardless of how
+many fields are in a <code>struct foo</code> you can initialize them <em>all</em> to 0
+by saying something like:</p>
+<pre><code>struct foo x = {0};
+</code></pre>
+<p>(I think this may be illegal in some versions of C if the first member
+of <code>struct foo</code> is some kind of aggregate, and I think it applies to
+arrays as well, and I think the requirement to have at least one
+initialized field has been removed in recent versions of C so <code>struct
+foo x = {};</code> works too, but I’m not sure of any of those.)</p>
+<p>So if you have a struct with a large number of fields, you can specify
+that you want to initialize one or two of them:</p>
+<pre><code>struct image_transforms t = { .premultiply_alpha = TRUE, .max_depth = 8 };
+</code></pre>
+<p>This kind of thing is especially useful to give named arguments to
+functions with a large number of optional arguments; maybe somewhere
+there’s a <code>transform_image(&amp;t, ...);</code> function you’re going to invoke.
+Of course, you always could have designed the interface with a bunch
+of functions:</p>
+<pre><code>image_transform_p t = new_image_transform();
+if (!t) return 0;
+it_set_premultiply_alpha(t, TRUE);
+it_set_max_depth(t, 8);
+</code></pre>
+<p>But this has several drawbacks compared to the designated-initializer
+approach.  It’s more code.  It introduces runtime failure into what
+could have been statically allocated memory, or
+statically-space-verified stack-allocated memory.  It takes time at
+runtime to execute the function calls, although initializing
+stack-allocated memory also takes time at runtime.  For
+statically-allocated objects, you need to somehow run the
+initialization code at startup, before anything uses the object.  It
+can’t be used inside an expression — it forces the caller into an
+imperative style.  And the implementor of the calling interface must
+write or macro-expand a large number of setter functions.</p>
+<p>With compound literals with designated initializers, you get a sort of
+verbose named-argument syntax:</p>
+<pre><code>transform_image(&amp;(struct image_transforms){
+    .premultiply_alpha = TRUE, .max_depth = 8});
+</code></pre>
+<p>This is not a terribly efficient way to get named arguments, though;
+since this struct has automatic storage duration, if you have 48
+fields in the struct, the compiler has to emit code to initialize the
+other 46, too.</p>
+<p>The astonishing thing, though, is that in C, all of these compound
+literals with automatic storage duration last to the end of their
+enclosing scope, while in C++ they’re treated as temporaries and
+disappear rather quickly.  This means you can build up arbitrarily
+complex nested structures this way, like Lisp.  Consider this
+expression of the S combinator in the λ calculus:</p>
+<pre><code>typedef struct ulc
+{
+    const char *var;
+    struct ulc *rator, *rand, *body;
+} ulc;
+
+...
+ulc s = { "x", .body = &amp;(ulc) {
+        "y", .body = &amp;(ulc) {
+            "z", .body = &amp;(ulc) {
+                .rator = &amp;(ulc) {
+                    .rator = &amp;(ulc) { "x" }, .rand = &amp;(ulc) { "z" }},
+                .rand = &amp;(ulc) {
+                    .rator = &amp;(ulc) { "y" }, .rand = &amp;(ulc) { "z" }}}}}};
+</code></pre>
+<p>Here a λ-abstraction is represented by an <code>ulc</code> having a non-null
+<code>body</code> and a non-null <code>var</code>, a variable is represented by having a
+null <code>body</code> and a non-null <code>var</code>, and an application of an operator to
+an operand is represented by having a null <code>var</code>.</p>
+<p>This represents some kind of argument about the merits of these
+language features but I am not sure whether it is in favor or in
+opposition.</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/programming.html">Programming</a> (13 notes)
+</li><li><a href="../topics/c.html">C</a> (4 notes)
+</li><li><a href="../topics/regrettable.html">Regrettable</a> (3 notes)
+</li><li>Ocaml</li></ul></div></html>

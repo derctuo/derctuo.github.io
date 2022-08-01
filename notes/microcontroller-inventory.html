@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html><title>Microcontroller inventory ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Microcontroller inventory</h1><div class="metadata">Kragen Javier Sitaker, 02020-11-18 (updated 02020-11-28)
+(4 minutes)</div><p>I have several microcontrollers: an Arduino Duemilanove with an
+ATMega328, a couple of Blue Pills (one with an STM32 and one with a
+CKS32; see <a href="stm32duino.html">notes on STM32duino</a>), two or three
+ATMega8s, 18 surface-mount ATTiny45s, 19 DIP ATTiny45s, two loose
+ATMega328s, 16 ATTiny2313s, an Arduino Nano (or is that a Teensy?),
+two Raspberry Pi Zeros, a Raspberry Pi 2 Model B 1.1 from 2014, and a
+Raspberry Pi from 2012 which I think is a Pi 1 B.  66 computers in
+all.</p>
+<p>But right now the Duemilanove is the only one I have successfully
+programmed!</p>
+<h2>ATTiny45</h2>
+<p><a href="https://www.hobbytronics.co.uk/arduino-attiny">It's apparently straightforward to rig up Arduino to program an
+ATTiny45</a>; you use the
+ArduinoISP sketch, wire up the ATTiny45 pin 1 (/reset) to Arduino pin
+10, ATTiny45 pin 5 (MOSI) to Arduino pin 11, ATTiny45 pin 6 (MISO) to
+Arduino pin 12, and ATTiny45 pin 7 (SCK) to Arduino pin 13, and of
+course V<sub>CC</sub> and ground on pins 8 and 4, and then I guess
+avrdude can program it.  There's an <a href="http://highlowtech.org/?p=1695">updated Arduino support library
+for Arduino 1.6</a> at
+<a href="https://raw.githubusercontent.com/damellis/attiny/ide-1.6.x-boards-manager/package_damellis_attiny_index.json">https://raw.githubusercontent.com/damellis/attiny/ide-1.6.x-boards-manager/package_damellis_attiny_index.json</a>,
+but probably just avr-gcc is fine most of the time.  And <a href="https://create.arduino.cc/projecthub/arjun/programming-attiny85-with-arduino-uno-afb829">there's an
+Arduino Create Hub page about this
+too</a>.
+For ArduinoISP <a href="https://arduino.stackexchange.com/questions/76815/setup-of-arduino-uno-as-arduinoisp-for-programming-attiny45">you probably want to hook up a cap to stop the Arduino
+from
+resetting</a>.</p>
+<p>Luna also gave me a PC with a parallel port, which might work with
+avrdude without ArduinoISP.</p>
+<p>The ATTiny45 is not super powerful and has only 8 pins, but it does
+have an ADC and support multiplexing the analog comparator between
+pins.</p>
+<h2>ATTiny2313</h2>
+<p>The ATTiny2313 is the first AVR I programmed actually, using a
+parallel port, using Limor Fried's minipov2.  It doesn't have an ADC
+at all, and its analog comparator isn't multiplexable between pins,
+but it has a somewhat less cripplingly small number of pins: 17 GPIOs
+instead of 6, 18 if you push it.</p>
+<p><a href="http://arduinolearning.com/code/program-attiny2313-arduino.php">Arduino
+support</a>
+is available at <a href="http://drazzy.com/package_drazzy.com_index.json">http://drazzy.com/package_drazzy.com_index.json</a>.
+You <a href="https://oscarliang.com/program-attiny2313-using-arduino/">hook up pin 1 (reset) to pin 10 of the Arduino, just as with the
+ATTiny45</a>,
+and similarly pins 17, 18, and 19 (DI, DO, SCK) to pins 11, 12, and 13
+of the Arduino.  (I'm guessing they're "DI" and "DO" because the 2313
+doesn't have SPI hardware.)  <a href="http://www.ernstc.dk/arduino/2313.htm">TinyDebugSerial is supposed to make the
+serial port work</a>.</p>
+<p>This last link also gives a somewhat mangled command line for using
+ArduinoISP or <a href="https://github.com/Coding-Badly/TinyISP">something called
+"TinyISP"</a> directly from
+avrdude.</p>
+<blockquote>
+<p>Avrdude, when using ArduinoISP</p>
+<pre><code>avrdude -P COM20 -b 19200 -p t2313 -c avrisp
+</code></pre>
+<p>Upload using TinyISP</p>
+<pre><code>-p attiny2313 -c stk500v1 -P COM3 -b19200 -Uflash:w:Blink.hex:i
+</code></pre>
+</blockquote>
+<p>The best documentation for avrdude <a href="http://www.ladyada.net/learn/avr/avrdude.html">is still Limor
+Fried's</a>.</p>
+<p><a href="https://forum.arduino.cc/index.php/topic,123388.30.html">There are a few different options for serial data on these tiny
+machines
+actually.</a>
+This is very useful because it provides a way to debug, and also to
+use these devices as sensors before having a screen to display the
+results on, and also a way to use them for continuous data acquisition
+or later download from EEPROM data.  And because it's reasonable to
+use a crystal on it, you can meet RS-232 timing requirements!</p>
+<h2>Programming AVRs with pushbuttons</h2>
+<p>Heinz D. <a href="http://www.elektronik-labor.de/AVR/KursAssembler/T13asm13.html">wrote an ATTiny13 tutorial in
+German</a>
+which starts out by attaching switches to the reset, SCK, and MOSI
+lines of an ATTiny13 and programming it with them.</p>
+<p><img alt="(screenshot attiny13-manual-programming.jpeg)" src="attiny13-manual-programming.jpeg" /></p>
+<p>Here's Heinz D.'s schematic:</p>
+<p><img alt="(screenshot attiny13-manual-programming-schematic.png)" src="attiny13-manual-programming-schematic.png" /></p>
+<p>The ATTiny2313 datasheet has "serial programming timing" on p. 205:</p>
+<p><img alt="(screenshot attiny2313-serial-programming.png)" src="attiny2313-serial-programming.png" /></p>
+<p>This doesn't really explain how you get into serial programming mode,
+or what data gets input or output, though.  It does mention the
+protocol a bit on p. 29: "If the RSTDISBL fuse is programmed, this
+start-up time will be increased to 14CK + 4 ms to ensure programming
+mode can be entered."  So apparently you program it during reset?
+Surely I'll eventually find the full procedure.</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/microcontrollers.html">Microcontrollers</a> (14 notes)
+</li><li><a href="../topics/practical.html">Practical</a> (12 notes)
+</li><li><a href="../topics/facepalm.html">Facepalm</a> (9 notes)
+</li><li><a href="../topics/stm32.html">The STM32 microcontroller family</a> (7 notes)
+</li><li><a href="../topics/avr.html">The AVR microcontroller</a> (6 notes)
+</li><li><a href="../topics/arduino.html">Arduino</a> (3 notes)
+</li></ul></div></html>

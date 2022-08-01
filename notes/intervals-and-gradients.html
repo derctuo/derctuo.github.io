@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html><title>Intervals and gradients ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Intervals and gradients</h1><div class="metadata">Kragen Javier Sitaker, 02020-10-16
+(4 minutes)</div><p>Darius Bacon linked me to
+<a href="https://twitter.com/paniq/status/1317063053339406336">https://twitter.com/paniq/status/1317063053339406336</a>:</p>
+<p>@paniq@mastodon.social / L. 🧩 . Ritter / @paniq:</p>
+<blockquote>
+<p>apparently these good people solved the explosion in steps when the
+ray gets close to the surface during SDF sphere marching (thanks to
+@Atrix256 ) <a href="https://diglib.eg.org/handle/10.1111/cgf13951">https://diglib.eg.org/handle/10.1111/cgf13951</a></p>
+<p>i must say i'm a little angry with myself because i spent hundreds
+of hours on getting around this exact problem and couldn't find a
+better way.</p>
+<p>there's only two shadertoys yet <a href="https://shadertoy.com/view/WdKczW">https://shadertoy.com/view/WdKczW</a></p>
+<p>the classical sphere marching method: lipschitz continuity
+guarantees that the blue line never intersects the diagonal of the
+red stepping function, which always moves as many units forward as
+it has measured upwards.</p>
+<p>plotting the first derivative of our curve (green), the light green
+lines designate the global lipschitz limit that the function is
+guaranteed never to overstep.</p>
+<p>the purple lines bracket the local upper and lower bounds of the
+first derivative within a local region.</p>
+<p>plotting the limits as as a wedge of tangents, all positive, we see
+that the region can't possibly contain a root, and thus deem it safe
+to skip the entire interval.</p>
+<p>whereas in this less beneficial interval, our tangent bundle can
+only guarantee us safe passage up until the cyan colored point.</p>
+<p>this region here however allows us to make a step twice as a large
+as a simple SDF lookup would permit us.</p>
+<p>it is easy to see how this method becomes particularly useful when
+we are grazing surfaces with low curvature, as the tangent width
+narrows, and we can practically perform an interation of the
+newton-raphson method.</p>
+<p>the authors don't do a good job of showing these connections. the
+provided formula is effectively a version of the newton-raphson
+method which uses a gradient interval instead of a local gradient.</p>
+<p>to compute the gradient interval, you use a combination of automatic
+differentiation and interval arithmetic on the first derivative.
+here are primitives for both:</p>
+<ul>
+<li>Interval Arithmetic <a href="https://shadertoy.com/view/lssSWH">https://shadertoy.com/view/lssSWH</a></li>
+<li>Derivative Arithmetic <a href="https://shadertoy.com/view/4dVGzw">https://shadertoy.com/view/4dVGzw</a></li>
+</ul>
+<p>the new arithmetic primitives will likely look a lot like joint
+ranges from revised affine arithmetic
+(<a href="https://shadertoy.com/view/4sV3zm">https://shadertoy.com/view/4sV3zm</a>), except that we get a right
+facing interval cone instead.</p>
+<p>a much more important consequence of all this is that the lipschitz
+continuity requirement |f'(x)| &lt;= 1 no longer applies as we always
+see a local gradient cone. you can use this to trace any old
+implicit function, not just only distance functions.</p>
+<p>bonus: with 1 more sample at the right end of the interval, we can
+reuse the same gradient interval, flip it, and use it to truncate
+our extrapolated destination. in this case, we discover that we can
+skip the entire interval rather than having to jump to the cyan
+point.</p>
+<p>the right hand samples amortize over time, as we can reuse them in
+the next iteration.</p>
+</blockquote>
+<p>Matt Keeter @impraxical:</p>
+<blockquote>
+<p>Dumb question: if you can do interval arithmetic on your function,
+why not directly check the interval result in the target segment (to
+see if it contains 0), rather than the interval of the gradient in
+the segment?</p>
+</blockquote>
+<p>@paniq:</p>
+<blockquote>
+<p>what do you do when the interval contains a possible root?</p>
+<p>Ah, that explains why this is useful :D</p>
+<p>I agree that affine arithmetic could tell you how far you could
+safely walk; I'm curious to see how "point + gradient range" (this
+paper) compares to "affine region" (RAA), in terms of ease of
+computation / tightness of bounds / etc.</p>
+</blockquote>
+<p>@paniq:</p>
+<blockquote>
+<p>RAA is costly, and has overshoots i.e. false positives, which means
+you're frequently backtracking. building intervals on the first
+derivative should in many cases be cheaper.</p>
+</blockquote><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/math.html">Math</a> (13 notes)
+</li><li><a href="../topics/graphics.html">Graphics</a> (10 notes)
+</li><li><a href="../topics/optimization.html">Mathematical optimization</a> (9 notes)
+</li><li><a href="../topics/automatic-differentiation.html">Automatic differentiation</a> (3 notes)
+</li><li><a href="../topics/quotes.html">Quotes</a> (2 notes)
+</li><li>Raytracing</li><li>Interval and affine arithmetic</li></ul></div></html>

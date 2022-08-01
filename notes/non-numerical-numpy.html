@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html><title>Using Numpy for non-numerical computation: what would a good example be? ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Using Numpy for non-numerical computation: what would a good example be?</h1><div class="metadata">Kragen Javier Sitaker, 02020-06-29 (updated 02020-06-30)
+(3 minutes)</div><p>I saw someone saying they’d never needed to use Numpy, and so never
+learned it, because it was for a specific use case that wasn’t theirs.
+This seemed to me like maybe they didn’t appreciate its versatility,
+so I thought I’d try out some non-numerical or semi-numerical
+computation with Numpy, and maybe Pandas.</p>
+<h2>Counting words in a string</h2>
+<p>The usual approach for counting words in Python, of course, is
+<code>len(s.split())</code>.  But we can do things with Numpy too.  First, let’s
+get some text into a Numpy array:</p>
+<pre><code>&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; text = "This isn't anything more than a text string, with some words.  Let's count them all"
+&gt;&gt;&gt; ta = np.array(list(' ' + text))
+</code></pre>
+<p>Now let’s find the spaces and the non-space things following them:</p>
+<pre><code>&gt;&gt;&gt; sp = (ta == ' ')
+&gt;&gt;&gt; ta[1:][sp[:-1] &amp; ~sp[1:]]
+array(['T', 'i', 'a', 'm', 't', 'a', 't', 's', 'w', 's', 'w', 'L', 'c',
+       't', 'a'], 
+      dtype='|S1')
+&gt;&gt;&gt; ''.join(ta[1:][sp[:-1] &amp; ~sp[1:]])
+'TiamtatswswLcta'
+</code></pre>
+<p>That seems to have worked; we can count the words just by summing the
+boolean vector:</p>
+<pre><code>&gt;&gt;&gt; (sp[:-1] &amp; ~sp[1:]).sum()
+15
+</code></pre>
+<p>Let’s use this approach to count the words in the King James Bible:</p>
+<pre><code>&gt;&gt;&gt; b = np.memmap('bible-pg10.txt', '|S1', 'r')
+&gt;&gt;&gt; sp = (b == ' ')
+&gt;&gt;&gt; (sp[:-1] &amp; ~sp[1:]).sum()
+749219
+&gt;&gt;&gt; len(open('bible-pg10.txt').read().split())
+824146
+</code></pre>
+<p>Hmm, what happened?</p>
+<pre><code>$ wc bible-pg10.txt
+ 100222  824146 4452069 bible-pg10.txt
+</code></pre>
+<p>So wc agrees with .split().</p>
+<pre><code>$ grep -P '^\S' bible-pg10.txt | wc
+  74927  823934 4400033
+</code></pre>
+<p>So it seems like there are 74927 lines beginning with a non-whitespace
+character, which precisely accounts for the difference.  We want to
+treat newlines as whitespace as well, and also, if the file starts
+with a word (which it does), we want to count that word too.</p>
+<p>Current Numpy contains an <code>isin</code> function to test set membership, but
+my old version doesn’t.  No matter!  We can use .any() as a
+substitute:</p>
+<pre><code>&gt;&gt;&gt; sp = (b == [[' '], ['\n'], ['\r']]).any(axis=0)
+&gt;&gt;&gt; b[sp[:100]]
+memmap([' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\r', '\n', '\r', '\n', ' ',
+       ' ', ' ', ' ', ' ', ' ', ' ', ' '], 
+      dtype='|S1')
+&gt;&gt;&gt; ''.join(b[:100])
+'\xef\xbb\xbfThe Project Gutenberg EBook of The King James Bible\r\n\r\nThis eBook is for the use of anyone anywhe'
+&gt;&gt;&gt; ws = (sp[:-1] &amp; ~sp[1:])
+&gt;&gt;&gt; ws[0] = True
+&gt;&gt;&gt; b[ws[:100]]
+memmap(['\xef', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\n', ' ', ' ', ' ',
+       ' ', ' ', ' ', ' ', ' '], 
+      dtype='|S1')
+&gt;&gt;&gt; ''.join(b[1:][ws[:100]])
+'\xbbPGEoTKJBTeiftuoaa'
+</code></pre>
+<p>That seems pretty reasonable.  So how many words are there?</p>
+<pre><code>&gt;&gt;&gt; ws.sum()
+824146
+</code></pre>
+<p>Good!  That takes 307 ms on this laptop, says IPython:</p>
+<pre><code>%%time
+b = np.memmap('bible-pg10.txt', '|S1', 'r')
+sp = (b == [[' '], ['\n'], ['\r']]).any(axis=0)
+ws = (sp[:-1] &amp; ~sp[1:])
+ws[0] = True
+print(ws.sum())
+</code></pre>
+<p>How fast is the standard approach?</p>
+<pre><code>%%time
+len(open('bible-pg10.txt').read().split())
+</code></pre>
+<p>147 ms, twice as fast!  So this is not a very compelling example!</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/programming.html">Programming</a> (13 notes)
+</li><li><a href="../topics/python.html">Python</a> (4 notes)
+</li><li><a href="../topics/arrays.html">Arrays</a> (3 notes)
+</li><li><a href="../topics/numpy.html">Numpy</a> (2 notes)
+</li></ul></div></html>

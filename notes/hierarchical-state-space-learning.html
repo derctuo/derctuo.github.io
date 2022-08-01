@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html><title>Hierarchical state space learning ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Hierarchical state space learning</h1><div class="metadata">Kragen Javier Sitaker, 02020-12-14
+(8 minutes)</div><p>(Probably none of this is new and all of it is obvious to those who
+study such things, but I’m just beginning to learn about the area.)</p>
+<p>Suppose you can observe a time-varying set of inputs or stimuli to
+some system, like a stirred vat of reagents or a circuit or a
+vibrating string, and a corresponding time-varying set of outputs.
+How would you go about automatically “learning” the behavior of the
+system?</p>
+<p>If you suppose that the system is approximately linear and
+time-invariant, then the output vector <em>y<sub>t</sub></em> is given by
+some direct-coupling matrix <em>D</em> multiplied by the input
+<em>u<sub>t</sub></em> plus some output matrix <em>C</em> multiplied by the system’s
+internal state <em>x<sub>t</sub></em>: <em>y<sub>t</sub></em> = <em>Du<sub>t</sub></em> +
+<em>Cx<sub>t</sub></em>.  Unfortunately we cannot observe <em>x<sub>t</sub></em>
+directly, and we may not even know what its dimensionality is, and it
+may be infinite.  But by hypothesis it is evolving in time according
+to some input forcing matrix <em>B</em> and its own square matrix of internal
+linear relationships <em>A</em>: <em>x<sub>t</sub></em> = <em>Bu<sub>t</sub></em> +
+<em>Ax</em><sub><em>t</em>-1</sub>.  And we can linearly superpose effects from
+stimuli at different points in the past, so <em>y<sub>t</sub></em> =
+<em>Du<sub>t</sub></em> + <em>C</em>Σ<em>ᵢAⁱBu</em><sub><em>t</em>-<em>i</em></sub>, <em>i</em> &gt; 0.</p>
+<p>If we factor the feedback matrix <em>A</em> with an eigendecomposition
+<em>QΛQ</em>⁻¹, the eigenvectors <em>Q</em> give us the “vibrational modes” of the
+system, and the eigenvalues <em>Λ</em> tell us how fast they decay (or,
+possibly, grow).  We can fold the <em>Q</em> and <em>Q</em>⁻¹ matrices into the <em>C</em>
+and <em>B</em> matrices respectively to reduce <em>A</em> to the diagonal matrix of
+eigenvalues.  Some of these eigenvalues may be small, which means that
+the vibrational modes in question die away very quickly; unless their
+coupling to the input and output is particularly strong, these can be
+dropped, reducing the dimensionality of the model, with little effect
+on the error.</p>
+<p>Given some estimates <em>A</em><sup>?</sup>, <em>B</em><sup>?</sup>,
+<em>C</em><sup>?</sup>, <em>D</em><sup>?</sup>, of the matrices <em>A</em>, <em>B</em>, <em>C</em>, and
+<em>D</em>, we can compute a residual <em>y<sub>t</sub></em> -
+(<em>D<sup>?</sup>u<sub>t</sub></em> +
+<em>C</em><sup>?</sup>Σ<em>ᵢA</em><sup>?</sup><em>ⁱB</em><sup>?</sup><em>u</em><sub><em>t</em>-<em>i</em></sub>)
+that tells us how shitty our estimates are for a given time <em>t</em>, and
+then we can summarize this residual vector over all times <em>t</em> by, for
+example, summing the squares or absolute values of the residuals to
+give us an overall residual shittiness to minimize.  There are a
+variety of standard optimization algorithms that may work to minimize
+this residual.</p>
+<p>In particular I think that if we use the sum of the squares of the
+residuals, ordinary least squares may work: we just take the
+derivative of the whole residual expression, set it to zero, and
+figure out what values of <em>A</em>, <em>B</em>, <em>C</em>, and <em>D</em> that gives us.  If
+there are less degrees of freedom in the observations <em>y<sub>t</sub></em>
+than there are in the four matrices we’re trying to estimate, I think
+the problem is underdetermined.  For example, if we have single scalar
+observations at 100 points in time <em>y<sub>t</sub></em> for a scalar-input
+system (i.e., <em>u<sub>t</sub></em> is also one-dimensional), and we suppose
+that the state space <em>x<sub>t</sub></em> is 10-dimensional, then <em>A</em> has
+100 degrees of freedom, <em>B</em> has 10, <em>C</em> has 10, and <em>D</em> has 1, so the
+system isn’t fully determined.  But if we suppose that it is
+9-dimensional, it is now fully determined, and if it’s 8-dimensional,
+it’s overdetermined.  (In the underdetermined case, we could add extra
+penalty terms for, for example, norms of the matrices involved, to get
+the “simplest” solution in some sense.)</p>
+<p>XXX okay smart guy, how can you derive 100 unknowns from a single
+equation?  you add all the squared residuals together, take the
+derivative, you have a sum of squared residual derivatives, you set it
+to zero, that’s still one equation.  ohhh: you take the partial
+derivative with respect to each design variable (<em>A</em><sup>?</sup>₀₀,
+etc.), and that gives you N equations — but now we’re faced with a
+different problem... I guess I need to go back and brush up on OLS and
+linear regression!</p>
+<p>Another approach is to use gradient descent: if we initially suppose
+that <em>A</em> is very small, perhaps a single real or complex coefficient,
+we should be able to iteratively converge very quickly.  If we then
+add dimensions one by one, optimizing after the addition of each new
+dimension, we ought to be able to converge relatively quickly, as each
+new dimension is in some sense being used to account for the error in
+the previous approximation.</p>
+<p>Since, as explained above, we can assume without loss of generality
+that <em>A</em> is a (complex) diagonal matrix (of eigenvalues), the number
+of design variables we need to optimize doesn’t actually increase
+quadratically with the dimensionality of the state space, as I said it
+does above — it only increases linearly.  For example, if we have 3
+scalar inputs, 2 scalar outputs, and 20 hidden variables in the state
+space, then <em>D</em> is 3×2, <em>A</em> is a 20-item diagonal matrix, <em>B</em> is 3×20,
+and <em>C</em> is 20×2.  I think <em>B</em> and <em>C</em> need to be complex as well, not
+just <em>A</em>, but <em>D</em> can be purely real.</p>
+<p>It should also be possible to use L1 basis pursuit algorithms in order
+to handle massively underdetermined systems, where we assume an
+absurdly large number of state-space dimensions, but privilege
+extremely sparse solutions.  This might require abandoning the
+eigenvalue-diagonal assumption about <em>A</em>, because, although that’s the
+sparsest <em>A</em> can be, it might impose unreasonable constraints of
+non-sparsity on <em>B</em> and <em>C</em>.</p>
+<p>Of course, no real system is perfectly linear, so even without
+measurement noise, we’ll have a nonzero residual signal, but hopefully
+we’ll also have some kind of estimate of the internal state vector of
+the system at each point in time, which will presumably be
+uncorrelated with the residual once our optimization has converged.
+But if we take the outer product of that state vector with itself, we
+will get a larger matrix some of whose items may have significant
+correlations with one or another channel of the residuals, and this
+will give us a second-order correction to apply to our linear
+predictor.  The kernel trick used in support vector machines is, as I
+understand it, a more efficient generalization of this approach, and
+can be applied to learn more general system behaviors.</p>
+<p>While you could in theory apply this sort of approach to any black-box
+system at all, it won’t work very well for extremely nonlinear systems
+like flip-flops.  For things like that, a hidden Markov model is
+probably a better sort of model, and that also has efficient
+algorithms for learning it; you can combine the two models by having
+different <em>A</em>, <em>B</em>, <em>C</em>, <em>D</em> matrices for different Markov states.
+But for mostly linear systems, this linear-first approach might have
+some useful merits.</p>
+<p>You can apply this to control systems (automatically tuning the model
+for model-predictive control to the plant), simulation (the
+plucked-string model alluded to earlier), or system identification
+(guessing what kind of circuit you’re looking at), among other things.</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/electronics.html">Electronics</a> (42 notes)
+</li><li><a href="../topics/math.html">Math</a> (13 notes)
+</li><li><a href="../topics/optimization.html">Mathematical optimization</a> (9 notes)
+</li><li><a href="../topics/control.html">Control</a> (5 notes)
+</li><li><a href="../topics/simulation.html">Physical system simulation</a> (3 notes)
+</li><li><a href="../topics/gradient-descent.html">Gradient descent</a> (3 notes)
+</li></ul></div></html>

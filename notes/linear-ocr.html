@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html><title>OCR with linear optimization ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>OCR with linear optimization</h1><div class="metadata">Kragen Javier Sitaker, 02020-11-06
+(1 minute)</div><p>Can you use linear optimization to efficiently solve the OCR problem?</p>
+<p>One reasonable linear objective function might be a weighted sum of
+the entropy of the text and the number of wrong ("noise") pixels, or
+perhaps the total absolute pixel error.  You can use the standard
+one-of-N mixed integer linear programming approach to select which
+glyph is at a given position, and a reasonable entropy function might
+use digraph frequencies in your language of choice.  You might be able
+to use some design variables that indicate the X-Y position of each
+glyph, and the font would perhaps be a shitload of parameters.</p>
+<p>Alternatively, simple hill-climbing with a nonlinear problem state
+ment might be simpler to formulate and work adequately; it might
+"learn" the font simultaneously with the position and angle of text on
+the page.  Gradient descent could more efficiently provide fine glyph
+positioning and adjust the glyph contents.  (Or just simple
+mean/median?)</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/performance.html">Performance</a> (25 notes)
+</li><li><a href="../topics/algorithms.html">Algorithms</a> (17 notes)
+</li><li><a href="../topics/optimization.html">Mathematical optimization</a> (9 notes)
+</li><li><a href="../topics/gradient-descent.html">Gradient descent</a> (3 notes)
+</li></ul></div></html>

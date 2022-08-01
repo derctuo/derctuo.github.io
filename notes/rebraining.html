@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html><title>Rebraining ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Rebraining</h1><div class="metadata">Kragen Javier Sitaker, 02020-11-16 (updated 02020-12-06)
+(12 minutes)</div><p>One of the things I’ve been wanting to do is to make an autonomous
+personal computing device, since one doesn’t seem to be forthcoming
+from the economy.  It seems likely the easiest way to do this is to
+get an existing device with the right peripherals (power, input, and
+output), remove its CPU and RAM, and implant a new microcontroller.</p>
+<p>None of the photos below are mine, so I cannot release them to the
+public domain; they are included for the purpose of factual
+commentary, including links to their sources.</p>
+<h2>Miscellaneous</h2>
+<p>Scientific calculators seem particularly promising here, but I should
+probably start with something easier, like a large four-banger.  See
+<a href="screens.html">the note on screens</a> for some details.</p>
+<p>The <em>most</em> interesting possibility here is probably a cellphone, maybe
+a flip phone for lower battery usage — these tend to have low-power
+sunlight-readable screens, rechargeable batteries, USB connections,
+usable keyboards, speakers, and microphones, as well as some radio
+stuff.  Old Nokia displays in particular are SPI and so relatively
+easy to connect up to (easier than directly driving an LCD), though
+you suffer some display latency as a result, and they only use a
+couple of microwatts.  <a href="https://articulo.mercadolibre.com.ar/MLA-875748264-celular-nokia-1110-a-reparar-o-repuestos-no-enciende-_JM">A broken Nokia 1110</a> goes for AR$500 (US$4) on
+MercadoLibre; a lot containing a 3200, a 9300, and a 2651 go for
+AR$1600 (US$10); a lot containing eight broken cellphones from that
+epoch, including two QWERTY phones, goes for AR$2000 (US$14); a broken
+QWERTY Nokia Asha 303 goes for AR$900 (US$7).  (The key words on
+Mercado Libre are <a href="https://listado.mercadolibre.com.ar/nokia-reparar">nokia reparar</a>.)  But this is probably a much more
+advanced project.</p>
+<p><img alt="(Broken Nokia 1100 photo)" src="broken-nokia-1100.jpeg" /></p>
+<p>I also have a solar garden light that seems like an appealing
+possibility, though perhaps to dissect for parts; see <a href="garden-light-panel.html">Garden Light
+Panel</a> for details.  I was disappointed to
+learn that the panel is only 40–80 mW rather than the 300 mW I was hoping for,
+probably because it’s amorphous, but that’s still enough to be useful.</p>
+<h2>Toys</h2>
+<p>There’s a <a href="https://articulo.mercadolibre.com.ar/MLA-846202429-smart-tablet-infantil-precio-promocional-_JM">“Lionel’s Smart Tablet infantil</a>” on MercadoLibre right
+now for sale by “chiquiplanet” for AR$3000 (US$20); it has what
+appears to be a large passive-matrix LCD screen that seems to be
+monochrome and about 80×16 non-square pixels, and has a gaudy 46-key
+ABCDEF membrane keyboard:</p>
+<p><img alt="(Smart Tablet photo)" src="smart-tablet.jpeg" /></p>
+<p>It runs on AA batteries and appears to have a reasonably robust
+construction, although it’s not marketed for kids under 3, which makes
+me wonder if it’s aimed at kids with intellectual disabilities.  It’s
+250 mm × 190 mm, and looks to be about 15 mm thick, which seems like
+it would be a lot of space for adding a solar panel.</p>
+<p>For AR$3500 (US$23) there’s a toy “<a href="https://articulo.mercadolibre.com.ar/MLA-825577235-computadora-bilingue-de-cars-original-ditoys-_JM">bilingual Disney Cars
+computer</a>” sold by El Mundo del Juguete, which looks like it maybe
+has a higher resolution display and also runs on AA batteries; it has
+a QWERTY keyboard and a mouse:</p>
+<p><img alt="(Cars toy computer photo)" src="cars-toy-computer.jpeg" /></p>
+<p>And the old standard “<a href="https://articulo.mercadolibre.com.ar/MLA-763348812-tetris-portatil-brick-game-con-9999-video-juegos-clasicos-_JM">9999 in 1 brick game</a>” from 2006 or earlier
+is still selling, at AR$790 (US$5), which I think is the same price I
+paid in 2006:</p>
+<p><img alt="(Brick Game photo)" src="brick-game.jpeg" /></p>
+<p>This thing has pixels on the LCD screen that are literally the Tetris
+squares; I think that means it’s 10×20 pixels.  The standard
+chip-on-board hardware provides you with a number of different games
+(with a “difficulty” parameter to multiply out to the 9999 number)
+within that context.</p>
+<p>Kinderland sells, for US$10, <a href="https://articulo.mercadolibre.com.ar/MLA-856207550-mini-juego-retro-tiny-arcade-pac-man-376-efull-_JM">a keychain-sized clone of the Pac-Man
+arcade machine</a> that runs on two AAA batteries:</p>
+<p><img alt="(photo of Pac-Man keychain)" src="keychain-pacman.jpeg" /></p>
+<p>This doesn’t have much of a keyboard, but it does have lots of space
+to add one, and it has what appears to be a thumb-sized backlit LCD
+(20 mm square) with a resolution on the order of an NTSC TV.  The
+advertisement explains several times that it’s a completely functional
+replica.  Several buyers marvel at how well it works.  <a href="https://hackaday.com/2019/12/09/teardown-168-in-1-retro-handheld-game/#comment-6204409">Tim
+Schuerewegen says he reprogrammed a similar but somewhat larger game
+console just by reprogramming its SPI Flash ROM</a>.</p>
+<p>I don’t know what kind of electronic interface the Pac-Man LCD takes
+but I imagine it’s pretty power-hungry.</p>
+<p>A more modern version of the "brick game" is the “<a href="https://articulo.mercadolibre.com.ar/MLA-797382657-consola-portatil-supreme-retro-simil-gameboy-168-juegos-gc-26-_JM">GC-26 168-in-1
+portable console</a>”, which is a sort of Gameboy form factor (78mm ×
+117mm × 24mm) with a 2.8-inch backlit color LCD and a volume knob, for
+US$12.50:</p>
+<p><img alt="(GC-26 photo)" src="handheld-game.jpeg" /></p>
+<p>The resolution looks pretty decent, like at least 640×480; probably
+it’s precisely NTSC or PAL resolution:</p>
+<p><img alt="(GC-26 screen closeup photo)" src="handheld-game-closeup.jpeg" /></p>
+<p>This has composite video output, charges over USB, includes an 800mAh
+lithium battery, an 8-bit CPU, 8 megabytes containing 168 ROMs, and
+probably no programmability.  <a href="https://hackaday.com/2019/12/09/teardown-168-in-1-retro-handheld-game/">Hackaday did a teardown of one under
+the brand “Weikin” last year;</a> they found it had a 128 mebibit NOR
+Flash chip you could probably reprogram.  <a href="https://www.youtube.com/watch?v=XrieCn9-9GU&amp;feature=youtu.be">Some dude on YouChube
+reviewed the games</a> and found some problems in the composite video
+output; he <a href="https://www.youtube.com/watch?v=ceI4CeIN1SQ">also took it apart and fixed a video problem</a>.</p>
+<p>There are a variety of branded variants of this device, including the
+Level-UP RetroBoy (“5 hour”, “600 mAh” battery), the NogaNet Pocky,
+and the Sup.  A smaller-scale version is sold for US$8 as the 351-gram
+<a href="https://articulo.mercadolibre.com.ar/MLA-747359420-consola-de-juego-portatil-8bits-328-juegos-sy-891-_JM">Seisa SY-891 or SY-888A Game Player Digital Pocket System</a>, with
+328 games on a 2.2-inch screen:</p>
+<p><img alt="(photo of Seisa SY-891 handheld game)" src="mini-handheld-game.jpeg" /></p>
+<h2>Telephony</h2>
+<p>Various kinds of telephony devices have displays, keyboards, buttons,
+and sometimes radios.</p>
+<p>For US$9.50 there’s <a href="https://articulo.mercadolibre.com.ar/MLA-609831162-identificador-cid-apto-telefonos-fijos-hasta-100-llamados-_JM">a caller-ID display</a> for sale:</p>
+<p><img alt="(Caller ID photo)" src="caller-id-machine.jpeg" /></p>
+<p>This evidently has about 20 digits of 7-segment reflective LCD plus
+some specific indicators, and a compartment for two AAA batteries.</p>
+<p>For US$19 there’s a cordless phone with a backlit LCD (which the
+vendor fraudulently claims is an LED display), an <a href="https://www.mercadolibre.com.ar/telefono-inalambrico-alcatel-versatis-e100-negro/p/MLA7992211">Alcatel Versatis
+E100</a>:</p>
+<p><img alt="(Cordless phone photo)" src="cordless-phone.jpeg" /></p>
+<p>This gets you a phone keypad with some menu buttons, a handset for
+voice communication, a rechargeable battery (supposedly 400-mAh and
+7-hour talk time) and recharging base, what looks like a 12-character
+14-segment alphanumeric display, and of course the short-range
+license-free radio, probably 900MHz with a 6kHz bandwidth.</p>
+<h2>Other radios</h2>
+<p>Someone is selling <a href="https://articulo.mercadolibre.com.ar/MLA-878695319-pager-morotola-radiomensaje-_JM">a Motorola one-way pager</a> for US$8 with what
+looks like a 20×4 character dot-matrix character display:</p>
+<p><img alt="(screenshot motorola-pager.jpeg)" src="motorola-pager.jpeg" /></p>
+<p>I’m not sure if text pager service still exists (and neither is the
+seller), but presumably this device comes with keyboard and screen
+intact, and Motorola pagers were famously durable.  It probably
+doesn’t have a rechargeable battery, but rather a AAA battery carrier.</p>
+<p>There are various walkie-talkies on sale (called “handy” apparently),
+like <a href="https://articulo.mercadolibre.com.ar/MLA-828118171-handy-baofeng-radio-walkie-talkie-bft12-16ch-uhf-auricular-_JM">this Baofeng BF-T12</a> for US$10 from DigitalStore:</p>
+<p><img alt="(screenshot baofeng-walkie-talkie.jpeg)" src="baofeng-walkie-talkie.jpeg" /></p>
+<p>This is a push-to-talk walkie-talkie transmitting on 16 25-kHz
+channels of the 400–470 MHz band, with a 1500-mAh USB-rechargeable
+battery that claims 8-hour battery life, a two-digit 7-segment LCD,
+earphone and microphone jacks and a volume knob, claiming a 6–10 km
+range in the country, or 1–5 km in the city.</p>
+<p>In the US, <a href="https://www.amazon.com/ask/questions/Tx16UEO8P1U0I6S/">using most of this band requires operator licensing</a> or
+is even reserved for emergency services, although two of the channels
+are FRS channels (up to 500 mW, while this radio is supposedly 2 W),
+but <a href="https://www.techwholesale.com/fcclicense.html">95% of users ignore this</a>, even though they’re potentially
+subject to 5-figure fines.  Also the US FCC restricts these radios to
+transmitting on 12.5-MHz channels since 2013 (“narrowbanding”).  <a href="https://www.argentina.gob.ar/noticias/banda-de-frecuencias-de-450-mhz">Here
+in Argentina at least some of this band is exclusively assigned to
+individual licensees</a> but I’m not sure what the legal status of
+the rest of the band is.</p>
+<h2>MP3 players</h2>
+<p>Someone’s selling what seems to be a <a href="https://articulo.mercadolibre.com.ar/MLA-898635390-mp3-i-modo-2-gb-usado-funciona-bien-_JM">2GB S1 MP3 USB stick for
+US$8</a>:</p>
+<p><img alt="(photo of S1 MP3)" src="s1-mp3.jpeg" /></p>
+<p><img alt="(closeup of S1 MP3)" src="s1-mp3-closeup.jpeg" /></p>
+<p>This is about the same price it went for in 2007, the last time I
+bought one.  It has a reflective dot-matrix passive-matrix LCD screen
+with on the order of 128×32 monochrome pixels, 2 GB of storage, an
+iPod-style conductive volume control, four buttons, and a USB A female
+connector to plug it in with.  If I’m right that it’s an S1 MP3, there
+are a couple of open-source firmwares for them (<a href="https://sourceforge.net/projects/s1mp3/">SourceForge</a>,
+<a href="http://s1mp3.w1r3.de/">the former s1mp3.de</a>, <a href="http://web.archive.org/web/20170718212035/http://s1mp3.org/">Wladston’s former s1mp3.org</a>) that
+added features, so you might be able to program it instead of
+rebraining it.  But they’ve been abandoned since 2009, and the CPU is
+just a 24-MHz Z80.</p>
+<p>Someone else is selling <a href="https://articulo.mercadolibre.com.ar/MLA-794481832-reproductor-mp3-sandisk-sansa-clip-zip-4-gb-500--_JM">their SanDisk Sansa 4GB MP3 player</a> for
+the more reasonable price of US$3.30; it has a MicroSD slot and a
+backlit LCD that looks to be something like 320×240... and a dead
+battery:</p>
+<p><img alt="(tiny photo of SanDisk player)" src="sandisk-mp3-tiny.jpeg" /></p>
+<p><img alt="(closeup photo of SanDisk screen)" src="sandisk-mp3-closeup.jpeg" /></p>
+<p>There are also “MP4 players” that have, typically, larger backlit
+color screens for viewing videos, which have apparently not been
+totally replaced by cellphones; some cost US$30 or more and have
+Bluetooth, FM radio transmission, and so on.</p>
+<h2>Plain screens</h2>
+<p>You can get a <a href="https://articulo.mercadolibre.com.ar/MLA-886881618-portarretratos-digital-philips-_JM">used “digital picture frame”</a> for US$23, basically
+a backlit 7-inch color LCD with what looks like resolution of about
+640×480:</p>
+<p><img alt="(photo of digital picture frame)" src="digital-picture-frame.jpeg" /></p>
+<p>Presumably this sucks battery like nobody’s business and is hard to
+rebrain.</p>
+<h2>Measuring instruments</h2>
+<p>MercadoLibre has an entire category of "balanzas para valija",
+suitcase scales, like <a href="https://articulo.mercadolibre.com.ar/MLA-871992554-balanza-digital-portatil-de-mano-hasta-50-kg-valija-pesca-_JM">this US$3.30 specimen</a>:</p>
+<p><img alt="(screenshot pocket-scale.jpeg)" src="pocket-scale.jpeg" /></p>
+<p>This includes a large, easy-to-read 3-digit 7-segment LCD, three
+buttons, and presumably some kind of strain gauge and battery.</p>
+<p>There are similar displays on <a href="https://articulo.mercadolibre.com.ar/MLA-870915952-termometro-digital-pinchacarne-liquidos-y-verduras-50-300-_JM">digital meat thermometers</a>
+(US$2.50), <a href="https://articulo.mercadolibre.com.ar/MLA-857590423-calibre-digital-de-medicion-crossmaster-fibra-de-carbono-_JM">digital calipers</a> (US$10), and <a href="https://articulo.mercadolibre.com.ar/MLA-815753063-balanza-digital-de-cocina-tara-1gr-5kg-7-kg-10-kg-con-pilas-_JM">digital countertop
+scales</a> (US$10).</p>
+<p><img alt="(screenshot meat-thermometer.jpeg)" src="meat-thermometer.jpeg" /></p>
+<p><img alt="(screenshot digital-calipers.jpeg)" src="digital-calipers.jpeg" /></p>
+<p><img alt="(screenshot countertop-scale.jpeg)" src="countertop-scale.jpeg" /></p>
+<p>There are also <a href="https://articulo.mercadolibre.com.ar/MLA-875477172-termometro-digital-refrigeracion-aire-acondicionado-c-cable-_JM">indoor/outdoor digital weather thermometers with LCD
+displays like this 3-digit 30mm-tall TPM-10 for AR$600 (US$4)</a>
+which tend to have fairly large displays:</p>
+<p><img alt="(photo of LCD thermometer)" src="lcd-thermometer.jpeg" /></p>
+<p>Some of them are larger and have more digits.  And the temperature
+sensor itself is potentially useful; simply rebraining such a
+thermometer without drilling any further holes could give you a
+logging Wi-Fi thermometer.</p>
+<h2>Clocks and watches</h2>
+<p>One <a href="https://articulo.mercadolibre.com.ar/MLA-805212889-reloj-despertador-cubo-cambia-7-colores-temperatura-alarma-full-time-mania-mercadolider-platinum-importadores-_JM">digital alarm clock</a> sells for US$3.40 and also has an LCD
+display with quite a number of 7-segment and 14-segment characters.</p>
+<p><img alt="(alarm clock photo)" src="alarm-clock.jpeg" /></p>
+<p>And for larger digits there’s <a href="https://articulo.mercadolibre.com.ar/MLA-759038721-reloj-despertador-sensor-luz-lcd-digital-alarma-temperatura-_JM">a 45-mm-tall LCD alarm clock</a>
+Planeta Zenok sells for US$6.50, with somewhat fewer digits:</p>
+<p><img alt="(big alarm clock photo)" src="big-alarm-clock.jpeg" /></p>
+<p>For US$2 you can get <a href="https://articulo.mercadolibre.com.ar/MLA-870440210-reloj-pulsera-calculadora-vintage-retro-digital-clasico-_JM">a MegaCuper LCD calculator watch</a>, though
+most competitors are much more expensive:</p>
+<p><img alt="(photo of calculator watch)" src="calculator-watch.jpeg" /></p>
+<h2>Remote controls</h2>
+<p>There are lots of remote controls that include a shitty keyboard, an
+infrared LED for communication, and a reflective LCD display, mostly
+those for air conditioners; for example, those of the <a href="https://articulo.mercadolibre.com.ar/MLA-785536413-control-remoto-aire-acondicionado-split-lg-akb73756210-fc-_JM">LG split air
+conditioner Akb73756210</a> (US$5), the <a href="https://articulo.mercadolibre.com.ar/MLA-676496899-control-remoto-aire-acondicionado-split-lg-bgh-arcool-ar809-_JM">LG BGH Arcool Ar809 air
+conditioner</a> (US$5), <a href="https://articulo.mercadolibre.com.ar/MLA-652573558-control-remoto-para-aire-acondicionado-split-samsung-_JM">the Samsung AR807 air conditioner</a>
+(US$4.50), and <a href="https://articulo.mercadolibre.com.ar/MLA-652573901-control-remoto-para-aire-acondicionado-split-sanyo-y512f2-_JM">the Sanyo Y512f2 air conditioner</a> (US$4.50).  The
+LCD displays typically have a few 7-segment or 14-segment digits or
+character positions and a bunch of special-purpose indicators: fan,
+snowflake, and so on.</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/electronics.html">Electronics</a> (42 notes)
+</li><li><a href="../topics/ghettobotics.html">Ghettobotics</a> (18 notes)
+</li><li><a href="../topics/microcontrollers.html">Microcontrollers</a> (14 notes)
+</li><li><a href="../topics/independence.html">Independence</a> (9 notes)
+</li></ul></div></html>

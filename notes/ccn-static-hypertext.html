@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html><title>Static hypertext on CCN ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Static hypertext on CCN</h1><div class="metadata">Kragen Javier Sitaker, 02020-05-16
+(2 minutes)</div><p>Implementing a static hypertext system on top of a service like the
+retrieve-by-hash service described in <a href="../notes/ccn-streams.html">Feeds or streams on CCNs</a> is
+straightforward.</p>
+<h2>Static hypertext</h2>
+<p>Each hypertext page is a file stored in the system, consisting of a
+short metadata header followed by the page itself in a format such as
+HTML or PDF, and it is identified by its hash.  Links to another page
+include the hash <code>H</code> of the file it’s stored in.  In this way, you can
+be certain that the linked page is precisely the version of the page
+that the author intended; no attacker can redirect you to a different
+page, not even the author herself at a later date, perhaps while being
+tortured by Mossad agents.</p>
+<p>Of course, if the attacker can trick you into looking at a page of
+theirs instead, they can make a copy of an authentic page with all the
+links redirected to more pages they wrote.  So all the security comes
+from the security of the initial link.</p>
+<p>This secure linking mechanism is also applicable to things like
+stylesheets, image liabilities, software libraries, software
+configuration files, and text transclusions.  In combination with a
+deterministic archival virtual machine with immutable semantics, this
+guarantees the interpretability of XXX</p>
+<p>A single file can easily contain multiple different “pages”, as
+TiddlyWiki does; the fragment-identifier mechanism of the XXX</p>
+<p>A manifest mechanism XXX</p>
+<p>Cache timing side channels XXX</p>
+<p>Threat model</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/security.html">Security</a> (11 notes)
+</li><li><a href="../topics/protocols.html">Protocols</a> (10 notes)
+</li><li><a href="../topics/hypertext.html">Hypertext</a> (3 notes)
+</li><li><a href="../topics/ccn.html">Content-centric networking/named-data networking</a> (2 notes)
+</li></ul></div></html>

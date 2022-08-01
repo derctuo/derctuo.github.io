@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html><title>Machine-readable PNG circuit diagram watermarks ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Machine-readable PNG circuit diagram watermarks</h1><div class="metadata">Kragen Javier Sitaker, 02020-11-06
+(1 minute)</div><p>Fractint stored the fractal parameters in its GIF89a output files, so
+that if you or someone else loaded them into Fractint later, you could
+recalculate at a higher resolution, or explore other parts of the
+fractal, or vary parameters.</p>
+<p>Screenshots or PNG files are a common way to share circuit diagrams
+from circuit simulation programs.  What if machine-readable circuit
+topology information was included in these files?  You could take the
+Fractint approach and just include a special parameter block, but that
+will be lost if someone, say, crops the image, or uses a screenshot
+program to get the image, or transcodes it to JPEG.  What if you sort
+of barcode or watermark it in the image itself?</p>
+<p>The first circuit given in <a href="level-shifter.html">Level Shifter</a> has 6 components; in the
+encoding used by Falstad's circuit simulator, it occupies 224 bytes,
+or 133 bytes gzipped, about 22 bytes per component.  I think it's
+probably possible to beat this by about a factor of 3, about 7 bytes
+per component, 56 bits per component.  Given that each component
+occupies about 500 pixels it seems like it should be pretty feasible
+to do this.</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/electronics.html">Electronics</a> (42 notes)
+</li><li><a href="../topics/file-formats.html">File formats</a> (7 notes)
+</li><li><a href="../topics/falstad.html">Falstad’s circuit simulator</a> (7 notes)
+</li><li><a href="../topics/communication.html">Communication</a> (7 notes)
+</li><li><a href="../topics/nostalgia.html">Nostalgia</a> (6 notes)
+</li><li><a href="../topics/coding.html">Coding</a> (4 notes)
+</li><li>Steganography</li></ul></div></html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html><title>LOGSL: Lisp object-graph serialization language ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>LOGSL: Lisp object-graph serialization language</h1><div class="metadata">Kragen Javier Sitaker, 02020-10-07 (updated 02020-10-09)
+(8 minutes)</div><p>LOGSL: Lisp object-graph serialization language.  Not a markup
+language.  I insist that it is not merely aping YAML.</p>
+<h2>Problem to solve</h2>
+<p>The problem to solve is mostly the problem of Python pickle: to
+serialize a possibly-cyclic in-memory object graph, then deserialize
+it.  However, I have a couple of desires that pickle fails to fulfill:</p>
+<ol>
+<li>
+<p>I would like it to be mostly human-readable and line-oriented so
+that I can check the result in to Git and successfully resolve update
+conflicts.</p>
+</li>
+<li>
+<p>I would like it to not be a security hole by default, even at the
+possible cost of being less convenient to use.</p>
+</li>
+</ol>
+<p>(I seem to be undecided about whether this is a
+single-programming-language thing or a cross-programming-language
+thing.  Maybe it should be a single-programming-language thing.  And
+maybe that language shouldn’t be Python.)</p>
+<h2>Inspiring examples</h2>
+<p>Here are some examples of syntax I think might be worth supporting:</p>
+<pre><code>- one
+- two
+- three
+</code></pre>
+<p>That’s a list or array containing three byte strings.</p>
+<pre><code>x 37
+y 38
+</code></pre>
+<p>That’s the dictionary represented in JSON as {"x": 37, "y": 38}.  The
+ordering of the keys is mandatorily ASCIIbetical.</p>
+<pre><code>[Point]
+x 37
+y 38
+label A
+</code></pre>
+<p>That’s an object of class Point whose instance variables are {"x": 37,
+"y": 38, "label": "A"}.  The ordering of the keys is mandatorily
+ASCIIbetical.</p>
+<pre><code>- "31"
+- "32"
+</code></pre>
+<p>That’s a list of two strings.  Without the quotes they would be
+integers.  Strings that contain only ASCII alphanumeric characters and
+the punctuation <code>_</code>, <code>-</code>, <code>.</code>, <code>?</code>, and <code>@</code>, and do not start with
+“-”, “.”, or a digit, must be represented as barewords as in the
+previous examples.  All other strings, such as those that start with
+“3” or contain spaces, must be represented with doublequotes,
+backslashing backslashes and embedded doublequotes.</p>
+<pre><code>[Rect]
+start
+    [Point]
+    x 1.5
+    y 2.4
+end
+    [Point]
+    x 3.1
+    y 2.6
+</code></pre>
+<p>That’s an object of class Rect whose instance variables start and end
+are Point objects.  The indentation must be four spaces.</p>
+<pre><code>- "ø"u
+</code></pre>
+<p>That’s a list containing a Unicode string consisting of a single
+codepoint.  In the concrete syntax this codepoint is represented by a
+quote, two UTF-8 bytes, another quote, and a lowercase “u”.  This
+bullshit is Python’s fault, and in decent languages that just store
+Unicode in byte strings as Pike and Ritchie intended, producing such
+an abortion will require the use of a custom mapping to a
+LOGSL-specific Unicode class.</p>
+<pre><code># John Doe
+[Person]
+firstname John
+lastname Doe
+wife (Mary Roe)
+</code></pre>
+<p>That’s a definition of an object labeled “John Doe” so that it can be
+referred to elsewhere, specifically by the reference “(John Doe)”.
+Its instance variable “wife” is indirected through just such a
+reference, to an object named “Mary Roe”.  Such definitions must occur
+in ASCIIbetical order following the main object graph.  Their
+identifiers are arbitrary but must be unique.  All those objects that
+are referred to more than once must be defined in this way.  Other
+objects may be defined in this way as well, for example to keep
+indentation manageable.</p>
+<p>No objects not transitively referenced from the main object graph may
+be thus defined.</p>
+<p>The label line “# John Doe” must be preceded by a blank line, unless
+it is at the beginning of the file.  Other blank lines are forbidden
+in LOGSL.</p>
+<p>If such a label line is at the beginning of the file, it is a label
+for the root of the main object graph, enabling things within the
+object graph to refer to that root.</p>
+<p>The main object graph, and indeed all such top-level objects (the
+others being labeled objects), is constrained to be an aggregate
+object such as a dictionary, a list, or a class instance, not a
+primitive object such as a string, a number, or null, which is
+represented as “???”.</p>
+<p>Hmm, that restriction could be avoided, especially with colons:</p>
+<pre><code># John Doe
+[Person]
+firstname: John
+lastname: Doe
+wife: (Mary Roe)
+</code></pre>
+<p>Dictionary keys that are compound objects could be referred to by title:</p>
+<pre><code>(John Doe) 5
+(Mary Roe) 18
+</code></pre>
+<h2>Python calling interface</h2>
+<p>To enable serialization and deserialization of class instances without
+implicitly granting LOGSL sources the permission to instantiate
+arbitrary classes, a set of classes or other factories must be
+provided to the deserializer.  Each must be possessed of a unique
+name.</p>
+<p>In Python, the default behavior for deserialization should be
+something like the following.  Get the name from <code>__name__</code>.  In the
+case of classes, magically set up an object as follows:</p>
+<pre><code>obj = klass.__new__(klass)
+obj.__dict__ = instance_variables
+</code></pre>
+<p>Other behaviors can be provided by a factory object that has
+<code>__name__</code> and can be called; an AliasedClass factory is provided to
+enable the resolution of name conflicts:</p>
+<pre><code>class AliasedClass:
+    def __init__(self, name, klass):
+        self.__name__ = name
+        self.klass = klass
+
+    def __call__(self, instance_variables):
+        obj = self.klass.__new__(self.klass)
+        obj.__dict__ = instance_variables
+        return obj
+</code></pre>
+<p>Other factory functions or objects can be used to support schema
+upgrade.</p>
+<p>For serialization, we need to supply more or less the same whitelist,
+and also the possibility of snipping unwanted object references at
+output time --- the link from the banana to the gorilla, or at least
+from the gorilla to the rest of the jungle.</p>
+<p>Python pickle does this by defining methods on the banana object; at
+this point the interface (“the copy protocol”) is extremely complex,
+involving methods known as <code>__getstate__</code>, <code>__getnewargs__</code>,
+<code>__getnewargs_ex__</code> (I’m not kidding), <code>__reduce__</code>, and, just to add
+insult to injury, <code>__reduce_ex__</code>.  In a simple case,
+<code>Banana.__getstate__</code> can simply return a copy of its instance
+variables dictionary with <code>gorilla</code> set to null (<code>None</code>).</p>
+<p>I think that probably a better approach for such cases is to include
+something other than a class in the whitelist of “classes”, which
+undertakes the work of computing different serialization data.  The
+simplest case is AliasedClass, where we might want to map the class
+name of the object back to the alias we’re expecting to find at
+deserialization time.  This requires making an entry that maps the
+runtime dynamic class to the AliasedClass instance.  But in another
+case we might want to, say, produce a “reduced” banana:</p>
+<pre><code>def Banana(banana):
+    d = banana.__dict__.copy()
+    del d['gorilla']
+    return 'Banana', d
+</code></pre>
+<p>Somehow, this function must be associated with the class it is
+intended to reduce, perhaps with a function attribute like
+<code>Banana.klass = fruits.Banana</code>.</p>
+<p>It may be worthwhile to define a similar sort of thing for producing
+candidate labels like the “John Doe” example above.  Python’s default
+<code>repr</code> for class instances is terrible in that it includes hexadecimal
+memory addresses, which create unnecessary merge conflicts and false
+diffs in IPython notebooks.  Even “Point 1”, “Point 2”, “Point 3”
+would be better, but “Point x=37” would be better still.  “Rect
+start=&lt;<strong>main</strong>.Point object at 0xb64858ac&gt;” would not be an
+improvement, though.</p>
+<h2>Golang calling interface</h2>
+<p>The Golang standard library includes serialization in “Gob”, JSON,
+generic arbitrary XML, and a generic “binary” format.  All of these
+use reflection a lot.  So I think it’s probably okay for LOGSL to use
+reflection too.</p>
+<p>I don’t know how to use reflection in Golang but I bet the source code
+for those four standard library modules is a good example to work
+from.</p>
+<h2>JS calling interface</h2>
+<p>JS lacks byte strings.  Otherwise I think it’ll be pretty similar to
+Python.</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/security.html">Security</a> (11 notes)
+</li><li><a href="../topics/file-formats.html">File formats</a> (7 notes)
+</li><li><a href="../topics/python.html">Python</a> (4 notes)
+</li></ul></div></html>

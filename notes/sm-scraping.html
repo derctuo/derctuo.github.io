@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html><title>Scraping Sciencemadness ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Scraping Sciencemadness</h1><div class="metadata">Kragen Javier Sitaker, 02020-10-01 (updated 02020-10-05)
+(4 minutes)</div><p>I want to snarf some of sciencemadness before it goes down, such as:</p>
+<p><a href="http://www.sciencemadness.org/talk/viewthread.php?tid=1245&amp;page=2">http://www.sciencemadness.org/talk/viewthread.php?tid=1245&amp;page=2</a></p>
+<h2>Initial look at URL patterns</h2>
+<p>That thread is in forum 2
+<a href="http://www.sciencemadness.org/talk/forumdisplay.php?fid=2">http://www.sciencemadness.org/talk/forumdisplay.php?fid=2</a>, which has
+216 pages such as
+<a href="http://www.sciencemadness.org/talk/forumdisplay.php?fid=2&amp;page=3">http://www.sciencemadness.org/talk/forumdisplay.php?fid=2&amp;page=3</a>.
+They link to pages like
+<a href="http://www.sciencemadness.org/talk/viewthread.php?tid=156102">http://www.sciencemadness.org/talk/viewthread.php?tid=156102</a> which
+may themselves have page numbers.  Sometimes they link to attachments
+like
+<a href="http://www.sciencemadness.org/talk/files.php?pid=643614&amp;aid=82955">http://www.sciencemadness.org/talk/files.php?pid=643614&amp;aid=82955</a>
+and include images like
+<a href="http://www.sciencemadness.org/talk/images/xpblue/default_icon.gif">http://www.sciencemadness.org/talk/images/xpblue/default_icon.gif</a>.</p>
+<p>There’s the risk that a thread in that forum might link to a thread in
+another forum, and then another, etc., but I think that mostly won’t
+happen.</p>
+<h2>First stab at crawling</h2>
+<p>So some regexps would be something like</p>
+<pre><code>http://www\.sciencemadness\.org/talk/forumdisplay\.php\?fid=2(?:&amp;page=\d+)?
+http://www\.sciencemadness\.org/talk/viewthread\.php\?tid=\d+(?:&amp;page=\d+)?
+http://www\.sciencemadness\.org/talk/files\.php\?pid=\d+&amp;aid=\d+
+http://www\.sciencemadness\.org/talk/images/.*
+</code></pre>
+<p>So I think the command is something like this:</p>
+<pre><code>time wget -r -l inf -np --regex-type pcre -w 17 --retry-connrefused \
+  --accept-regex 'http://www\.sciencemadness\.org/talk/(?:images/.*|files\.php\?pid=\d+&amp;aid=\d+|viewthread\.php\?tid=\d+|forumdisplay\.php\?fid=2(&amp;page=\d+))' \
+  http://www.sciencemadness.org/talk/forumdisplay.php?fid=2
+</code></pre>
+<p>I can't use <code>-N</code> because the messageboard doesn’t provide
+Last-Modified.  <code>-nc</code> doesn’t do the right thing because wget doesn’t
+know to reparse the on-disk forum indexes.  I have to use <code>-l inf</code>
+because the default is 5.</p>
+<p>Happily they do have a robots.txt that implicitly allows this kind of
+mirroring.</p>
+<p>The above does end up with a bunch of duplicates:</p>
+<pre><code>www.sciencemadness.org/talk/viewthread.php?tid=27851&amp;goto=search&amp;pid=310821
+www.sciencemadness.org/talk/viewthread.php?tid=27851&amp;goto=search&amp;pid=310836
+</code></pre>
+<p>etc.  So far this is only a minor irritant, a tarpit that has sucked
+up 21 out of the 190 files I’ve snarfed so far on a single thread;
+wget isn’t smart enough to notice that these are all just redirects to
+things like</p>
+<pre><code>http://www.sciencemadness.org/talk/viewthread.php?tid=27851#pid310836
+</code></pre>
+<p>This suggests that maybe the regexp is not being required to match the
+whole URL, just the beginning (or maybe anywhere).  Also I hadn’t
+allowed the &amp;page= on the viewthread regexp at the time, so I guess
+it’s pretty certain.</p>
+<h2>A second attempted crawl</h2>
+<p>All right, trying again; seems to be working better now:</p>
+<pre><code>time wget -r -l inf -np --regex-type pcre -w 17 --retry-connrefused \
+  --accept-regex 'http://www\.sciencemadness\.org/talk/(?:images/.*|files\.php\?pid=\d+&amp;aid=\d+|viewthread\.php\?tid=\d+(?:&amp;page=\d+)?|forumdisplay\.php\?fid=2(?:&amp;page=\d+)?)$' \
+  http://www.sciencemadness.org/talk/forumdisplay.php?fid=2
+</code></pre>
+<p>(Apologies for the poorly formatted regexp.  Probably <code>(?x:...)</code>
+formatting across lines would have been a good idea...)</p>
+<p>Initially I tried it with <code>-w 1.7</code> until I was sure I’d fixed <em>that</em>
+problem.  Now, half a gig later, it seems to be doing okay, though
+some images have been uploaded twice.  Maybe <code>--page-requisites</code> would
+be a good idea but I don’t know how it interacts with
+<code>--accept-regex</code>.  Maybe also <code>-k --adjust-extension</code> would also be
+useful.</p>
+<p>After 20-some hours this seems to be doing okay with something like
+1200 thread pages in 700 threads and 3000 attachments successfully
+downloaded, totaling 1.1 GB:</p>
+<pre><code>while :; do
+    echo "$(ls talk/|grep -Po 'tid=\d+'|sort -u | wc -l)" \
+         "$(ls talk/|grep -Po 'tid=\d+(?:&amp;page=\d+)?'|sort -u | wc -l)" \
+         "$(ls talk/|grep -Po 'aid=\d+'|sort -u | wc -l)"
+    sleep 10m
+done
+</code></pre>
+<p>There are a few cases where the same file is downloaded under two
+different attachment IDs, resulting in some bloat, but it seems to be
+a minority of the total.</p>
+<p>The pagination of the forum goes up to page 216, and I think it’s 30
+threads per page, suggesting that the total number of threads is a bit
+under 6500, and so I’m something like 11% done.  (If so, I’m going to
+run out of space on this disk.)</p>
+<p>Aha, in fact it says on the front page of the forum: 98022 posts in
+6460 threads (“topics”).  Total stats: 36333 topics, 497573 posts,
+288119 members.  So the forum I’m snarfing is about 20% of the total
+number of posts, and I’m about 10% or 15% done with it.</p>
+<p>I was missing this file:</p>
+<pre><code>wget -x http://www.sciencemadness.org/talk/js/header.js
+</code></pre>
+<p>And this directory:</p>
+<pre><code>wget -r -w 21 -np http://www.sciencemadness.org/scipics/
+</code></pre>
+<p>...which turns out to have a lot of interesting stuff in it.  And
+actually the default <code>-l 5</code> wasn’t enough, snarfing only 499 MB in
+2249 files.</p>
+<p>After another day I’m up to 1412 threads, 2236 pages, and 6201
+attachments, 2.1 gigabytes; one quarter done with this forum.</p>
+<p>After another day my netbook crashed, and wget can’t recover, so I
+need to find a better way to spider the site.</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/materials.html">Materials</a> (51 notes)
+</li><li><a href="../topics/practical.html">Practical</a> (12 notes)
+</li><li><a href="../topics/linux.html">Linux</a> (3 notes)
+</li><li><a href="../topics/web-scraping.html">Web scraping</a> (2 notes)
+</li></ul></div></html>

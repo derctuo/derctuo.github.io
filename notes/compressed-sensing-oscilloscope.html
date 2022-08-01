@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html><title>Oscilloscope superresolution via compressed sensing? ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Oscilloscope superresolution via compressed sensing?</h1><div class="metadata">Kragen Javier Sitaker, 02020-11-17
+(1 minute)</div><p>Can compressed sensing make a better oscilloscope?</p>
+<p>The STM32 has a 1Msps 12-bit ADC, and <a href="https://tomeko.net/miniscope_v2c/">there are oscilloscope projects
+using it</a>.  But a decent
+oscilloscope has at least 20MHz of bandwidth, and the Miniscope has
+461kHz, so it’s about 2.3% of a decent oscilloscope.</p>
+<p>Actually though the STM32F103C8T6 used in that project and in the Blue
+Pill has <em>two</em> such ADCs.  If you apply them both to the same input,
+though, you won’t get any more information because (IIRC) they sample
+in sync.  This is ideal if you’re trying to measure the
+voltage-current characteristics of some device but suboptimal if you
+want to measure a single signal faster.  You could perhaps put an
+analog filter on one of the inputs in order to phase-shift some signal
+components.</p>
+<p>But what if you can fire the ADCs, or an external sample-and-hold
+circuit feeding them, at effectively random times?  Then you could
+sample the signal in a time-domain basis that’s incoherent with
+respect to its frequency-domain content.  Then maybe you could use a
+standard ℓ₁-minimizing basis-pursuit algorithm to look for a sparse
+frequency-domain signal that explains what you saw?</p>
+<p>It seems like that might be enough to get you an effective 20MHz or so
+of bandwidth, though of course only for signals that really <em>are</em> sparse.</p><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/contrivances.html">Contrivances</a> (44 notes)
+</li><li><a href="../topics/electronics.html">Electronics</a> (42 notes)
+</li><li><a href="../topics/metrology.html">Metrology</a> (17 notes)
+</li><li><a href="../topics/optimization.html">Mathematical optimization</a> (9 notes)
+</li><li><a href="../topics/stm32.html">The STM32 microcontroller family</a> (7 notes)
+</li><li><a href="../topics/oscilloscopes.html">Oscilloscopes</a> (2 notes)
+</li><li><a href="../topics/compressed-sensing.html">Compressed sensing</a> (2 notes)
+</li></ul></div></html>

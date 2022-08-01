@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html><title>Reuleaux ⁑ Derctuo</title><meta charset="utf-8"></meta><link href="../liabilities/style.css" rel="stylesheet"></link><meta content="width=device-width, initial-scale=1.0" name="viewport"></meta><h1>Reuleaux</h1><div class="metadata">Kragen Javier Sitaker, 02020-10-15 (updated 02020-10-18)
+(19 minutes)</div><p>I’m reading Reuleaux’s 1874 book on machine kinematics, or rather its
+English translation, and I thought I’d make some notes.  Reuleaux
+formulated kinematics as it is studied today, in terms of lower and
+higher kinematic pairs with varying degrees of freedom, such as
+revolute, prismatic, and cylindrical joints.</p>
+<p>This is one of the rare cases where the Google scan is of less bad
+quality than the Archive’s own scan; kinematicsofmach00reulrich.pdf
+has the left side of many pages cut off, while so far Google’s
+kinematicsmachi01reulgoog.pdf seems okay.  As always it is lower in
+resolution and color depth, but so far this seems to be an
+improvement, accelerating as it does the rendering.  It seems to lack
+OCR text, though, while the Archive’s own scan has somewhat passable
+OCR.  The OCR is still not good enough to copy and paste, but
+sometimes it may be faster to edit the results than to retype from
+scratch.</p>
+<p>The Archive’s scan also does a less appallingly bad job of capturing
+the figures, though it still leaves something to be desired.  (Compare
+p. 31, for example; 49 of 646 in the Archive’s scan, 52 of 651 in
+Google’s.)</p>
+<p>Mupdf in particular handles the total absence of OCR text rather
+disappointingly when you initiate a search, freezing for a few minutes
+before it comes to the end of the document.</p>
+<p>Many aspects of the typography and usage of this work deviate from
+modern standards, but none more glaringly than its use of increased
+letter spacing for emphasis, where modern practice, or even common
+19th-century English practice, would use italic.  This was of course
+necessary in German blackletter typesetting, which entirely lacks
+italic, but I suspect that even the original German version of this
+work was set in modern humanist letters rather than blackletter.
+(Perhaps I should go back and check.)  I often fail to notice this on
+the first reading of a passage.</p>
+<p>Where I’ve quoted passages using this form of emphasis below, I’ve
+replaced it with italics.</p>
+<p>The typography <em>does</em> use italics to distinguish mathematical
+variables and references to points in figures.</p>
+<h2>Introduction</h2>
+<p>It’s interesting that Reuleaux traces the development of kinematics
+though a whole series of 19th-century researchers, including (to my
+surprise) Ampère.  I had sort of thought that the systematic study of
+kinematics had sort of been stuck at the level of Archimedes’ “simple
+machines” still taught in the vulgar elementary schools: the inclined
+plane, the screw, the lever, the wheel and axle, the pulley, and the
+wedge.  But indeed Reuleaux outlines the development of the ideas by
+Galileo, by Hâchette, by Borgnis, by Lanz, by Monge, by Willis, by
+Ampère, by Newcomen, by Watt, and by a dozen others, prior to himself.
+Justifiably, though he characterizes all their theories as “wrecked”.</p>
+<p>It’s intriguing to see the etymology and sense development of
+“automatic” and “automation”:</p>
+<blockquote>
+<p>Moreover, as a further fruit of this uncertainty there has been an
+attempt to construct yet another special study which demands
+mention.  This is the so-called <em>Automatics</em>, the study of the
+realization in mechanism of motions either supposed or given by
+mathematical expressions.  For this further attempt at separation we
+have to thank the engineer E. Stamm, who wishes again to divide his
+subject into pure and applied parts, as fully described in his
+<em>Essai sur l’automatique pure</em>, 1863.</p>
+</blockquote>
+<p>Of course the term “automaton” is much older.</p>
+<p>When Reuleaux speaks of “the real end before us — the progressive
+development of the machine,” it is difficult to avoid being reminded
+of Forster’s <em>The Machine Stops</em> from a few years later.</p>
+<p>The modern development of flexure design methods is a disquieting echo
+of the disjointed and “wrecked” development of mechanisms of which
+Reuleaux complains; the stamp-collecting botany of the <em>Handbook of
+Compliant Mechanisms</em> closely resembles what he deplores in Monge’s
+and Lanz’s work.  This is startling since, of course, we have a fairly
+complete theory of elastic deformation as well as well-developed
+practical numerical methods of computation.  But in Reuleaux’s time,
+the analogous theory of rigid motion was similarly well-developed; you
+can design a planar four-bar linkage to tween between three
+predetermined positions with compass and straightedge, and the whole
+lovely theory of quaternions commonly used for rigid motion in modern
+games engines predated this book by decades.  As Reuleaux laments:</p>
+<blockquote>
+<p>Here again is a point from which the weakness of the method hitherto
+employed can be surveyed at a glance.  Its difference from the ideal
+method is not that it employs the inductive instead of the deductive
+method ; that would indeed be no advantage, but it might still be
+defensible.  No, it has been entirely unmethodical.  It has chosen
+no fixed method of investigation, or rather, it has not found any in
+spite of zealous search...</p>
+</blockquote>
+<p>Rhetorically, this Introduction is a masterpiece; Reuleaux promises
+the world to his diligent student, while warning them of the
+difficulty of their quest and deprecating their existing knowledge:</p>
+<blockquote>
+<p>We often do not know ourselves how closely wedged-in our ideas are
+by the boundaries which education and study have drawn around
+us. ... all these pile up mighty hindrances.  I cannot therefore
+shorten the way, although the truths to which it leads are of great
+simplicity. ... to conclude in the words of Göthe, ” What is not
+understood is not possessed.”</p>
+</blockquote>
+<p>It’s interesting to note that in Reuleaux’s time it was not yet known
+how recent the introduction of the wheel was, due to the still
+primitive state of the archaeological science; he claims “carriages”
+are known from the oldest times, while in fact they seem to postdate
+even such recent artifacts as the Great Pyramid.</p>
+<p>His account here of Watt’s parallel motion is sticking with me.  I
+keep thinking about it.</p>
+<h2>General Outlines</h2>
+<h3>Nature of the Machine-Problem</h3>
+<p>I just can’t get over the evocative nature of the prose, and the sharp
+contrast with the uniform oatmeal mediocrity of modern academic
+writing:</p>
+<blockquote>
+<p>So soon as the force <em>Q</em> begins to act it calls forth in the
+interior of the wheel, the shaft and the supports, internal
+molecular forces, opposite in direction and exactly equal to
+it. ... there are opposed to all external forces others concealed in
+the interior of the bodies forming the system,...</p>
+</blockquote>
+<p>after which he proceeds to quote a verse from Schiller (!).</p>
+<p>Reuleaux actually comments a bit on the question of flexures here: “In
+actual machines...we use however only those materials which...alter
+their form under the action of external forces very little, so little
+that the corresponding variations from the original form may be
+neglected.”</p>
+<p>I enjoy his description of the strength or rigidity of bodies as being
+“latent forces”, in contrast to actually existing “sensible forces”.</p>
+<p>His definition of a machine is thought-provoking, as much for the
+aspects it omits (material handling, information, control, energy,
+force, thermodynamics, friction, efficiency, metrology, electricity,
+programmability, strength, tolerances, troubleshooting, wear,
+reliability, cost, clamping) as for what it includes:</p>
+<blockquote>
+<p><em>A machine is a combination of resistant bodies so arranged that by
+their means the mechanical forces of nature can be compelled to do
+work accompanied by certain determinate motions.</em></p>
+</blockquote>
+<p>It’s a damned sight better than “a combination of simple machines”,
+though, and it doesn’t exclude the use of kinetic energy or
+hydraulics as many inferior definitions have.</p>
+<p>It’s interesting that this more or less explicitly excludes the
+boilers and condensers of the steam-engines Reuleaux has given such
+prominent placement earlier.</p>
+<h3>The Science of Machines</h3>
+<p>Here we see again the primacy Reuleaux grants to position and motion,
+but also what a high priority he places on forces.  So far there’s no
+mention of compliance and backlash except as an enemy; nothing about
+springs or preloading.</p>
+<h3>General Solution of the Machine-Problem</h3>
+<p>Even with the limited definition Reuleaux has given, this section
+heading seems amazingly ambitious.</p>
+<blockquote>
+<p>The moving bodies are prevented, by bodies <em>in contact with them</em>
+[emphasis in original]... this contact ... must take place
+continually, ...</p>
+</blockquote>
+<p>This seems to exclude backlash and clearances entirely!</p>
+<p>I have no idea what a “plummer block” is.</p>
+<p>This is the section where he introduces the <strong>kinematic pair</strong>.</p>
+<p>It’s fascinating that in is Figure 4, the first kinematic pair he
+introduces (before he even introduces the term) is not any of the
+basic ones, but rather a block sliding in an irregularly curved plane
+channel as the channel constrains it to rotate unevenly.  Then on the
+<em>next</em> page his figures 5 and 6 are classic screw and prismatic joint.</p>
+<p>Aha, and after Figure 9 he explains the meaning of “higher kinematic
+pair”:</p>
+<blockquote>
+<p>Accordingly the reciprocal combinations of two elements gives us
+again <em>a pair of elements, which may differ from either of the
+single pairs of which it is composed.</em></p>
+</blockquote>
+<p>(And, as with his Figure 4 example of the weird sliding block, his
+first explicit example of a higher kinematic pair is an arbitrary
+weird thing, rather than something well-known.)</p>
+<p>I really appreciate that Reuleaux is giving one or two examples first
+and only then giving definitions.</p>
+<p>Also, he defines <em>kinematic chain</em> here, far more clearly than I’d
+heard it defined before.  So I’m finding this reading very rewarding
+so far.</p>
+<p>I’d never thought of this before, but there’s an interesting analogy
+between how changing the position of one element in a closed kinematic
+chain (a term I’m not sure I understand completely yet) alters the
+position of all the others, and how changing the current or voltage of
+one element such as a capacitor or inductor in an electrical circuit
+alters the current and voltage of all the others.  In both cases you
+can’t analyze a single component in isolation; to see the system
+non-wholistically you must find other elements into which to decompose
+it, such as eigenstates or linearly superimposed circuits.  But I
+don’t know what those components could be for either a closed
+kinematic chain or a nonlinear electrical circuit.  (And I don’t think
+anything similar to the linear decomposition of circuits is known for
+kinematic chains, or things like the linkage-synthesis papers I’ve
+been reading would be using it.)</p>
+<p>The aside “a cylindrical pin fitting a corresponding eye, the axes of
+all being parallel” immediately calls to mind Hoberman spheres and the
+like; if the axes instead all intersect at a point, you get the same
+sort of linkage, but thus constrained to a sphere rather than a plane.
+And of course there are other relationships that can provide more
+interesting movements.  (Hoberman’s insight was similar but had to do
+with lines drawn transversely through the centers of multiple such
+joints.)</p>
+<p>Aha, and here we have another key definition of Reuleauxian
+kinematics:</p>
+<blockquote>
+<p><em>A closed kinematic chain, of which one link is thus made
+stationary, is called a mechanism.</em></p>
+</blockquote>
+<p>At this point it’s worth comparing 19th-century European automata with
+19th-century Japanese automata; while both treat the outward form and
+appearance of the mechanism as being as important as its position,
+work, and movement, the Japanese automata extensively used cable
+drive, including on uneven cams, while the European automata like
+Jaquet-Droz’s Writer used exclusively rigid bodies.  Reuleaux is
+seeking to embrace not only pulleys and belts in his analysis but even
+hydraulic machines, but he has barely mentioned anything flexible or
+hydraulic yet, despite the world-shaking importance of the
+mechanization of textile manufacture in the late 18th and early 19th
+century, in part by Vaucanson himself.</p>
+<p>So we can see in some sense why Babbage’s work was so unsuccessful and
+why the Writer would not be equaled for some 150 years, roughly until
+Bush’s Differential Analyzer.  To keep the world of machinery
+intellectually manageable, its paradigm deliberately excluded
+consideration of the aspects crucial to such achievements.  In
+Reuleaux so far I see not even the smallest hint of the approach that
+animated Zuse, Shannon, and Turing.</p>
+<p>Here we see boldface in the text for a definition:</p>
+<blockquote>
+<p><em>The effort thus applied performs mechanical work which is
+accompanied by determinate motions; the whole, that is to say, is a</em>
+<strong>Machine</strong>.</p>
+</blockquote>
+<p>We also see the first mention of clocks, though nothing about the
+questions of metrology, calibration, and cancelation of errors that
+had enabled the conquest of Latitude with machinery a century before,
+as well as the first mention of balances (in the sense of a
+weighing-scale); though he does promise to “consider these questions
+systematically” later.</p>
+<p>One of the words whose usage has apparently changed significantly
+since this book was translated is “empirically”, which seems here to
+mean “by trial and error”.</p>
+<p>He does finally mention “the spinning-machine” in this section, and
+the sewing-machine.  The thread and fabric of the sewing-machine seems
+to fit very poorly into Reuleaux’s theory — the whole machine exists
+to put them into certain regular motions with respect to one another,
+but their motion is neither rigid nor determinate, and substantial
+parts of the machine exist purely in order to modulate the friction
+and tension on them.</p>
+<h2>Phoronomic Propositions</h2>
+<p>“Phoronomic” is explained in the first section here; it means
+something like “concerning the study of the geometric motions of rigid
+bodies”.</p>
+<h3>Preliminary remarks</h3>
+<p>Phoronomy, etc.</p>
+<h3>Relative motion in a plane</h3>
+<p>Newtonian relativity.</p>
+<p>Relative motion of two points is considered only in terms of their
+distances, thus omitting rotation — rotational orientation is not
+considered proper to a point.  Motion of a point relative to a plane
+it’s moving in requires only its distances from two points, not three,
+permitting a reflection ambiguity — perhaps chiral orientation is not
+considered proper to a plane.</p>
+<p>Interestingly, it seems that when he considers motion of a line
+relative to another line, he <em>does</em> consider sliding motion along the
+line to be motion.</p>
+<h3>Temporary Centre; the Central Polygon</h3>
+<p>It’s surprising that he considers “the Phoronomics of point-systems”
+to be “exhausted” by propositions in two dimensions only!</p>
+<p>This idea of a “temporary center” of rotation, for any arbitrary
+rotation, is very interesting.  It reminds me of the
+compass-and-straightedge four-bar-linkage construction technique.</p>
+<p>“Open polygons” occur frequently in computer graphics but they are
+usually called something else.</p>
+<p>I don’t understand this “reciprocal polygon” yet.  Why exactly must it
+exist, and be reciprocal?</p>
+<h3>§ 7. Centroids; Cylindric Rolling</h3>
+<p>Oh, this makes the reciprocal polygon thing a bit clearer, though it’s
+still not clear why it must exist.  Boy, this sure is a different
+meaning of “centroid” than the one I’m familiar with, though not
+<em>completely</em> unconnected — the centroid of a uniform shape is its
+center of gravity, which is the center on which it turns when it has
+only angular momentum.</p>
+<p>All this terminology of “common, curtate, and prolate trochoids” is
+new to me, and I think I’ll have to look it up.</p>
+<p>When he says, “<em>All relative motions of con-plane figures may be
+considered to be rolling motions</em>”, he seems to be omitting the
+possibility of pure translational motion, which is the limit of
+rolling about an infinitely distant center.</p>
+<p>It’s nice that he is getting into three-dimensional objects moving
+now, but I can’t help but wonder if there are possibilities of
+three-dimensional motion other than the possibilities arising from
+extending two-dimensional motions prismatically, although Reuleaux
+claims there aren’t.  For example, motions where the instantaneous
+axis of rotation twists from one moment to the next.  And what is the
+instantaneous axis of rotation of a common screw?</p>
+<p>It is now apparent that the reciprocal polygons of which Reuleaux was
+speaking may have quite different shapes.</p>
+<h3>§ 8. The Determination of Centroids</h3>
+<p>The construction he gives for finding the second point <em>M</em>₁ in Figure
+19 (p. 66) escapes me at the moment.  I will have to come back to
+this.</p>
+<p><strong>Oh</strong>.  Because <em>M</em>₁ is notionally part of the same rigid body as <em>P</em>
+<em>and Q</em>, its distances to them are not changed by rolling; at the
+<em>given point in the movement has been brough into coincidence with
+<strong>O*₁, so those distances are the distances from the moved positions
+</strong>P</em>₁ and Q*₁.</p>
+<p>Figure 20 in the Google scan (p. 67, 88/651) is partly illegible; it
+is identical to Figure 10.  In the Archive’s scan it is perfectly
+legible.  Incidentally, I think this page shows that the scans were
+taken from two separate physical copies, as the Archive’s scan is
+stamped, “Reese Library of the University of California”.</p>
+<p>Aha, and here he confronts the question of pure translational motion,
+using the device of “infinitely distant points”, which seems pretty
+kosher, although not all this geometry so far is projectively
+invariant.  (Or is it?)</p>
+<p>Figure 22 is blowing my tiny fucking mind.</p>
+<h3>§ 9. Reduction of Centroids</h3>
+<p>I am totally not understanding this.  I thought the motion uniquely
+determined the two centroid curves?  But now we can invent more
+centroids for the same motion?</p>
+<p>Here he confronts the question of parallel motion in all of its
+complexity.</p>
+<p>Hmm, there’s a clue about these “secondary centroids” in the part
+where he talks about gear teeth (though he never says “gear”, always
+“spur-wheel”).</p>
+<h3>§ 10. Rotation about a Point</h3>
+<p>Now Reuleaux seems to be taking up the question that had worried me
+earlier, that of motions in space that are not merely the extrusion of
+motions in a plane.</p>
+<h3>§ 11. Conic Rolling</h3>
+<p>Whoa, trippy, dude.</p>
+<h3>§ 12. Most general Form of the Relative Motion of Rigid Bodies</h3>
+<p>Okay, great, now we’re getting into screwing motions?</p>
+<p>Oh wow.</p>
+<h3>§ 13. Twisting and Rolling of Ruled Surfaces</h3>
+<p>Holy shit.</p>
+<p>Hmm, he has a hypoid drive here, although he doesn’t call it that.</p>
+<h2>Pairs of Elements</h2>
+<h3>§ 14. Different Forms of Pairs of Elements</h3><script src="../liabilities/addtoc.js"></script><div><h2>Topics</h2><ul><li><a href="../topics/mechanical.html">Mechanical things</a> (19 notes)
+</li><li><a href="../topics/history.html">History</a> (17 notes)
+</li><li><a href="../topics/book-notes.html">Book notes</a> (4 notes)
+</li><li><a href="../topics/gearing.html">Gearing</a> (3 notes)
+</li></ul></div></html>
